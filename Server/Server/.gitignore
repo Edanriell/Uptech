@@ -1,0 +1,83 @@
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+bin/
+obj/
+
+# Visual Studio IntelliSense Cache
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUNIT
+*.VisualState.xml
+TestResult.xml
+
+# Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Template Directory
+_Template/
+
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+
+# Package Files
+*.nupkg
+# Change .zip to match the required file extension of your project's publish artifacts.
+*.zip
+
+# ASP.NET Sensitive Data
+# Define a section naming sensitive files or paths you want excluded from Git
+# Start section with "Sensitive" and end it with "EndSensitive" like this:
+# Sensitive
+#   Example/SensitiveFile.txt
+#   Example/SensitiveFolder/*
+# EndSensitive
