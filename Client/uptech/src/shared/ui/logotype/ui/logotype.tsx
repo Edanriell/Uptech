@@ -3,19 +3,17 @@ import Image from "next/image";
 
 type LogotypeProps = {
 	colorScheme?: "light" | "dark";
+	size?: "small" | "medium";
 };
 
-// TODO
-// Logotype size small, normal
-
-export const Logotype: FC<LogotypeProps> = ({ colorScheme = "dark" }) => {
+export const Logotype: FC<LogotypeProps> = ({ colorScheme = "dark", size = "small" }) => {
 	switch (colorScheme) {
 		case "dark": {
 			return (
 				<Image
 					src="/images/vector/logotype-dark.svg"
-					width="132"
-					height="32"
+					width={size === "small" ? 115 : 132}
+					height={size === "small" ? 28 : 32}
 					alt="Uptech company logotype"
 				/>
 			);
@@ -24,8 +22,8 @@ export const Logotype: FC<LogotypeProps> = ({ colorScheme = "dark" }) => {
 			return (
 				<Image
 					src="/images/vector/logotype-light.svg"
-					width="115"
-					height="28"
+					width={size === "small" ? 115 : 132}
+					height={size === "small" ? 28 : 32}
 					alt="Uptech company logotype"
 				/>
 			);

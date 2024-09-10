@@ -17,7 +17,17 @@ const config: Config = {
 			},
 			gridTemplateColumns: {
 				"mobile-navigation-auto-fit": "repeat(auto-fit, minmax(147px, 1fr))"
+			},
+			width: {
+				"fill-chrome": "-webkit-fill-available",
+				"fill-firefox": "-moz-available"
 			}
+		},
+		screens: {
+			mobile: "390px",
+			tablet: "990px",
+			laptop: "1366px",
+			desktop: "1440px"
 		},
 		colors: {
 			white: {

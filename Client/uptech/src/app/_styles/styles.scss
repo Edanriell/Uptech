@@ -14,9 +14,11 @@ html {
 	font-size: 6.25%;
 	scroll-behavior: smooth;
 	font-family: var(--font-general-sans), sans-serif;
+	box-sizing: border-box;
 }
 
 body {
+	position: relative;
 	font-size: 16em;
 	text-rendering: geometricPrecision;
 	min-width: 374rem;
