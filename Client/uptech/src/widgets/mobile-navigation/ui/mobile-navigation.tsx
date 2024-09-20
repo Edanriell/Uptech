@@ -1,10 +1,13 @@
+"use client";
+
 import { ComponentPropsWithoutRef, FC, useContext } from "react";
 import { AnimatePresence, motion, MotionProps } from "framer-motion";
 import Link from "next/link";
 
-import { HeaderContext } from "@widgets/header/ui";
+import { HeaderContext } from "@widgets/header/model";
 
 import { Icon } from "@shared/ui/icon/ui";
+import { useWindowSize } from "@shared/lib/hooks";
 
 type PrimaryMobileNavigationProps = {
 	classes?: string;
@@ -54,6 +57,8 @@ const secondaryNavigationExitAnimations = {
 
 export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) => {
 	const { mobileNavigationState, toggleCart, toggleUserProfile } = useContext(HeaderContext);
+
+	const { width } = useWindowSize();
 
 	const primaryMobileNavigationLinks = [
 		{
@@ -114,7 +119,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 
 	return (
 		<AnimatePresence>
-			{mobileNavigationState === "opened" && (
+			{width < 990 && mobileNavigationState === "opened" && (
 				<motion.nav
 					initial={primaryNavigationInitialAnimations}
 					animate={primaryNavigationEntryAnimations}

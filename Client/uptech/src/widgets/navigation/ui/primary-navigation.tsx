@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, JSX, useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Link from "next/link";
@@ -33,6 +35,7 @@ const primaryNavigationLinks: navigationLink = [
 
 export const PrimaryNavigation: FC = () => {
 	const [activeLink, setActiveLink] = useState(primaryNavigationLinks[0].name);
+
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const activeLinkElementRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -115,7 +118,10 @@ export const PrimaryNavigation: FC = () => {
 				}}
 				aria-hidden
 				className="absolute z-[10] w-full overflow-hidden ml-[65rem] mr-[65rem]"
-				style={{ transition: "clip-path 0.25s ease", clipPath: "inset(0px 75% 0px 0% round 17px)" }}
+				style={{
+					transition: "clip-path 0.25s ease",
+					clipPath: "inset(0 79% 0 10% round 17px)"
+				}}
 				ref={containerRef}
 			>
 				<ul className="relative flex w-full justify-center bg-alizarin-crimson-600">

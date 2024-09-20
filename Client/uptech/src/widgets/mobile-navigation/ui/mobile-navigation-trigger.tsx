@@ -1,7 +1,9 @@
+"use client";
+
 import { ComponentPropsWithoutRef, FC, useContext } from "react";
 import { motion, MotionProps } from "framer-motion";
 
-import { HeaderContext } from "@widgets/header/ui";
+import { HeaderContext } from "@widgets/header/model";
 
 type MobileNavigationTriggerProps = {
 	classes?: string;

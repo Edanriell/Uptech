@@ -1,6 +1,8 @@
+"use client";
+
 import { FC, useContext } from "react";
 
-import { HeaderContext } from "@widgets/header/ui";
+import { HeaderContext } from "@widgets/header/model";
 
 import { Icon } from "@shared/ui/icon/ui";
 

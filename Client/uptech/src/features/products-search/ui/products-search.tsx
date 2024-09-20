@@ -160,23 +160,18 @@ export const ProductsSearch: FC<ProductsSearchProps> = ({
 	let searchClasses = "";
 
 	useEffect(() => {
-		if (width <= 553) {
-			setMaxProducts(4);
-		} else if (width <= 716) {
-			setMaxProducts(6);
-		} else if (width <= 879) {
-			setMaxProducts(8);
-		} else if (width <= 990) {
-			setMaxProducts(10);
-		} else if (width >= 1090 && width < 1253) {
-			setMaxProducts(12);
-		} else if (width >= 1253 && width < 1416) {
-			setMaxProducts(14);
-		} else if (width >= 1416) {
-			setMaxProducts(16);
-		} else {
-			setMaxProducts(10);
-		}
+		const determineMaxProducts = (width: number) => {
+			if (width <= 553) return 4;
+			if (width <= 716) return 6;
+			if (width <= 879) return 8;
+			if (width <= 990) return 10;
+			if (width >= 1090 && width < 1253) return 12;
+			if (width >= 1253 && width < 1416) return 14;
+			if (width >= 1416) return 16;
+			return 10; // Default case
+		};
+
+		setMaxProducts(determineMaxProducts(width));
 	}, [width]);
 
 	if (mobileNavigationState === "opened" && width < 990) {
