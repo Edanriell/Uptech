@@ -1,4 +1,4 @@
-import { FC, JSX, useEffect, useRef, useState } from "react";
+import { FC, JSX, useCallback, useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Link from "next/link";
 
@@ -42,27 +42,53 @@ export const PrimaryNavigation: FC = () => {
 	useEffect(() => {
 		const container = containerRef.current;
 
+		if (container) {
+			const activeLinkElement = activeLinkElementRef.current;
+
+			calculateClipPath({ animationDuration: 0, container, activeLinkElement });
+		}
+	});
+
+	useEffect(() => {
+		const container = containerRef.current;
+
 		if (activeLink && container) {
 			const activeLinkElement = activeLinkElementRef.current;
 
+			calculateClipPath({ animationDuration: 0.5, container, activeLinkElement });
+		}
+	}, [activeLink, activeLinkElementRef, containerRef]);
+
+	const calculateClipPath = useCallback(
+		({
+			animationDuration,
+			container,
+			activeLinkElement
+		}: {
+			animationDuration: number;
+			container: HTMLDivElement;
+			activeLinkElement: HTMLAnchorElement | null;
+		}) => {
 			if (activeLinkElement) {
 				const { offsetLeft, offsetWidth } = activeLinkElement;
 
 				const clipLeft = offsetLeft;
 				const clipRight = offsetLeft + offsetWidth;
 
-				console.log(
-					`inset(0 ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0 ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
-				);
-
 				animationControls.start({
-					clipPath: `inset(0 ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0 ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
+					transition: {
+						duration: animationDuration,
+						type: "spring",
+						bounce: 0
+					},
+					clipPath: `inset(0% ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0% ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
 				});
 			}
-		}
-	}, [activeLink, activeLinkElementRef, containerRef]);
+		},
+		[]
+	);
 
-	const renderPrimaryNavigationLinks = () => {
+	const renderPrimaryNavigationLinks = useCallback(() => {
 		return primaryNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -80,9 +106,9 @@ export const PrimaryNavigation: FC = () => {
 				</Link>
 			</li>
 		));
-	};
+	}, [activeLink]);
 
-	const renderPrimaryNavigationLinksForClipPathContainer = () => {
+	const renderPrimaryNavigationLinksForClipPathContainer = useCallback(() => {
 		return primaryNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -100,24 +126,19 @@ export const PrimaryNavigation: FC = () => {
 				</Link>
 			</li>
 		));
-	};
+	}, [activeLink]);
 
 	return (
 		<nav className="relative flex flex-col items-center w-fit">
 			<ul className="relative flex w-full justify-center">{renderPrimaryNavigationLinks()}</ul>
 			<motion.div
 				animate={animationControls}
-				transition={{
-					duration: 0.5,
-					type: "spring",
-					bounce: 0
-				}}
 				aria-hidden
 				className="absolute z-[10] w-full overflow-hidden"
-				style={{
-					clipPath: "inset(0 86% 0 0% round 17px)"
-				}}
 				ref={containerRef}
+				style={{
+					clipPath: "inset(0% 100%)"
+				}}
 			>
 				<ul className="relative flex w-full justify-center bg-alizarin-crimson-600">
 					{renderPrimaryNavigationLinksForClipPathContainer()}

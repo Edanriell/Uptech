@@ -1,6 +1,15 @@
 "use client";
 
-import { ComponentPropsWithoutRef, FC, JSX, useContext, useEffect, useRef, useState } from "react";
+import {
+	ComponentPropsWithoutRef,
+	FC,
+	JSX,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState
+} from "react";
 import { AnimatePresence, motion, MotionProps, useAnimationControls } from "framer-motion";
 import Link from "next/link";
 
@@ -58,9 +67,33 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 	useEffect(() => {
 		const container = containerRef.current;
 
+		if (container) {
+			const activeLinkElement = activeLinkElementRef.current;
+
+			calculateClipPath({ animationDuration: 0, container, activeLinkElement });
+		}
+	});
+
+	useEffect(() => {
+		const container = containerRef.current;
+
 		if (activeLink && container) {
 			const activeLinkElement = activeLinkElementRef.current;
 
+			calculateClipPath({ animationDuration: 0.5, container, activeLinkElement });
+		}
+	}, [activeLink, activeLinkElementRef, containerRef]);
+
+	const calculateClipPath = useCallback(
+		({
+			animationDuration,
+			container,
+			activeLinkElement
+		}: {
+			animationDuration: number;
+			container: HTMLDivElement;
+			activeLinkElement: HTMLAnchorElement | null;
+		}) => {
 			if (activeLinkElement) {
 				const { offsetLeft, offsetWidth, offsetTop, offsetHeight } = activeLinkElement;
 
@@ -70,16 +103,18 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				const clipTop = offsetTop;
 				const clipBottom = offsetTop + offsetHeight;
 
-				console.log(
-					`inset(${clipTop}px ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% ${container.offsetHeight - clipBottom}px ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
-				);
-
 				animationControls.start({
+					transition: {
+						duration: animationDuration,
+						type: "spring",
+						bounce: 0
+					},
 					clipPath: `inset(${clipTop}px ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% ${container.offsetHeight - clipBottom}px ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
 				});
 			}
-		}
-	}, [activeLink, activeLinkElementRef, containerRef]);
+		},
+		[]
+	);
 
 	const secondaryMobileNavigationLinks = [
 		{
@@ -99,7 +134,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 		}
 	];
 
-	const renderPrimaryMobileNavigationLinks = () => {
+	const renderPrimaryMobileNavigationLinks = useCallback(() => {
 		return primaryMobileNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -117,9 +152,9 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</Link>
 			</li>
 		));
-	};
+	}, [activeLink]);
 
-	const renderPrimaryMobileNavigationLinksForClipPathContainer = () => {
+	const renderPrimaryMobileNavigationLinksForClipPathContainer = useCallback(() => {
 		return primaryMobileNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -137,9 +172,9 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</Link>
 			</li>
 		));
-	};
+	}, [activeLink]);
 
-	const renderSecondaryMobileNavigationLinks = () => {
+	const renderSecondaryMobileNavigationLinks = useCallback(() => {
 		return secondaryMobileNavigationLinks.map(({ name, handleLinkClick, Icon }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<motion.button
@@ -167,7 +202,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</motion.button>
 			</li>
 		));
-	};
+	}, []);
 
 	return (
 		<AnimatePresence>
@@ -212,17 +247,12 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 					</ul>
 					<motion.div
 						animate={animationControls}
-						transition={{
-							duration: 0.5,
-							type: "spring",
-							bounce: 0
-						}}
 						aria-hidden
-						className="absolute z-[10] w-full overflow-hidden"
-						style={{
-							clipPath: "inset(18px 74% 154px 5% round 17px)"
-						}}
+						className="absolute z-[10] w-fill-firefox w-fill-chrome overflow-hidden"
 						ref={containerRef}
+						style={{
+							clipPath: "inset(0% 100%)"
+						}}
 					>
 						<ul className="pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] rounded-[8rem] bg-alizarin-crimson-600 flex flex-col items-start flex-[1]">
 							{renderPrimaryMobileNavigationLinksForClipPathContainer()}
