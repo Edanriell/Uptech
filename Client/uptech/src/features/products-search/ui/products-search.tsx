@@ -1,6 +1,4 @@
-"use client";
-
-import { ComponentPropsWithoutRef, FC, useEffect, useState } from "react";
+import { ComponentPropsWithoutRef, FC, useEffect, useRef } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, MotionProps } from "framer-motion";
 
@@ -9,6 +7,10 @@ import { useWindowSize } from "@shared/lib/hooks";
 // TODO
 // Implement Search functionality
 
+// TODO
+// Refactor to sidebar
+// Items should be  overflow visible
+
 type ProductsSearchProps = {
 	mobileNavigationState: "opened" | "closed";
 	searchState: "opened" | "closed";
@@ -16,22 +18,27 @@ type ProductsSearchProps = {
 } & ComponentPropsWithoutRef<"div"> &
 	MotionProps;
 
-const productsSearchInitialAnimations = { opacity: 0, y: 10, scale: 0.975, filter: "blur(4px)" };
+const productsSearchInitialAnimations = {
+	opacity: 0,
+	y: 28,
+	scale: 0.92,
+	filter: "blur(4px)"
+};
 
 const productsSearchEntryAnimations = {
 	opacity: 1,
 	y: 0,
 	scale: 1,
 	filter: "blur(0px)",
-	transition: { delay: 0.15 }
+	transition: { delay: 0.3, duration: 1.5, type: "spring", bounce: 0 }
 };
 
 const productsSearchExitAnimations = {
 	opacity: 0,
-	y: 10,
-	scale: 0.975,
+	y: 28,
+	scale: 0.96,
 	filter: "blur(4px)",
-	transition: { delay: 0.15 }
+	transition: { delay: 0, duration: 1.45, type: "spring", bounce: 0 }
 };
 
 const searchedProducts = [
@@ -154,8 +161,9 @@ export const ProductsSearch: FC<ProductsSearchProps> = ({
 	mobileNavigationState,
 	classes
 }) => {
-	const [maxProducts, setMaxProducts] = useState<number>(4);
+	// const [maxProducts, setMaxProducts] = useState<number>(4);
 	const { width } = useWindowSize();
+	const maxProducts = useRef<number>(4);
 
 	let searchClasses = "";
 
@@ -171,7 +179,7 @@ export const ProductsSearch: FC<ProductsSearchProps> = ({
 			return 10; // Default case
 		};
 
-		setMaxProducts(determineMaxProducts(width));
+		maxProducts.current = determineMaxProducts(width);
 	}, [width]);
 
 	if (mobileNavigationState === "opened" && width < 990) {
@@ -182,7 +190,7 @@ export const ProductsSearch: FC<ProductsSearchProps> = ({
 
 	const renderFoundProducts = () => {
 		return searchedProducts.map(({ id, imageUrl, name, price, href }, index) => {
-			if (index >= maxProducts) return null;
+			if (index >= maxProducts.current) return null;
 			return (
 				<li key={name + "-" + id + "-" + index}>
 					<a href={href}>

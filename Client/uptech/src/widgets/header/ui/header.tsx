@@ -1,9 +1,10 @@
 "use client";
 
 import { FC, useState } from "react";
+import dynamic from "next/dynamic";
 
-import { ProductsSearch } from "@features/products-search/ui";
 import { MobileNavigation } from "@widgets/mobile-navigation/ui";
+import { StaticHeader } from "@widgets/header/ui/static-header";
 
 import {
 	HeaderContext,
@@ -12,17 +13,9 @@ import {
 	toggleSearch,
 	toggleUserProfile
 } from "../model";
-import dynamic from "next/dynamic";
-import { StaticHeader } from "@widgets/header/ui/static-header";
-
-// TODO
-// Implement skeleton loading
-// Fix animation delay
-// Check all code for header again
 
 const DynamicHeader = dynamic(() => import("./dynamic-header"), {
-	ssr: false,
-	loading: () => <p>Loading...</p>
+	ssr: false
 });
 
 export const Header: FC = () => {
@@ -48,7 +41,6 @@ export const Header: FC = () => {
 			<StaticHeader />
 			<DynamicHeader />
 			<MobileNavigation classes="fixed top-[80rem] left-0" />
-			<ProductsSearch searchState={searchState} mobileNavigationState={mobileNavigationState} />
 		</HeaderContext.Provider>
 	);
 };

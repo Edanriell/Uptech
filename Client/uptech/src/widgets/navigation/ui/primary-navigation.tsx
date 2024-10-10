@@ -1,16 +1,14 @@
-"use client";
-
 import { FC, JSX, useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Link from "next/link";
 
-type navigationLink = Array<{
+type NavigationLink = {
 	name: string;
 	href: string;
 	icon?: JSX.Element;
-}>;
+};
 
-const primaryNavigationLinks: navigationLink = [
+const primaryNavigationLinks: Array<NavigationLink> = [
 	{
 		name: "Home",
 		href: "#"
@@ -53,11 +51,13 @@ export const PrimaryNavigation: FC = () => {
 				const clipLeft = offsetLeft;
 				const clipRight = offsetLeft + offsetWidth;
 
+				console.log(
+					`inset(0 ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0 ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
+				);
+
 				animationControls.start({
 					clipPath: `inset(0 ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0 ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
 				});
-
-				// container.style.clipPath = `inset(0 ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% 0 ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`;
 			}
 		}
 	}, [activeLink, activeLinkElementRef, containerRef]);
@@ -104,23 +104,18 @@ export const PrimaryNavigation: FC = () => {
 
 	return (
 		<nav className="relative flex flex-col items-center w-fit">
-			<ul className="relative flex w-full justify-center ml-[65rem] mr-[65rem]">
-				{renderPrimaryNavigationLinks()}
-			</ul>
+			<ul className="relative flex w-full justify-center">{renderPrimaryNavigationLinks()}</ul>
 			<motion.div
 				animate={animationControls}
 				transition={{
-					duration: 0.25,
+					duration: 0.5,
 					type: "spring",
-					damping: 15,
-					stiffness: 250,
-					restDelta: 0.5
+					bounce: 0
 				}}
 				aria-hidden
-				className="absolute z-[10] w-full overflow-hidden ml-[65rem] mr-[65rem]"
+				className="absolute z-[10] w-full overflow-hidden"
 				style={{
-					transition: "clip-path 0.25s ease",
-					clipPath: "inset(0 79% 0 10% round 17px)"
+					clipPath: "inset(0 86% 0 0% round 17px)"
 				}}
 				ref={containerRef}
 			>

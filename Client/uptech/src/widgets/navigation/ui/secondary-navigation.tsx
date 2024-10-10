@@ -1,6 +1,5 @@
-"use client";
-
 import { FC, useContext } from "react";
+import { motion } from "framer-motion";
 
 import { HeaderContext } from "@widgets/header/model";
 
@@ -12,28 +11,47 @@ export const SecondaryNavigation: FC = () => {
 	const secondaryNavigationLinks = [
 		{
 			name: "Search",
-			action: toggleSearch,
+			handleLinkClick: toggleSearch,
 			Icon: () => <Icon type="search" />
 		},
 		{
 			name: "Profile",
-			action: toggleUserProfile,
+			handleLinkClick: toggleUserProfile,
 			Icon: () => <Icon type="profile" />
 		},
 		{
 			name: "Cart",
-			action: toggleCart,
+			handleLinkClick: toggleCart,
 			Icon: () => <Icon type="cart" count={1} />
 		}
 	];
 
 	const renderSecondaryNavigationLinks = () => {
-		return secondaryNavigationLinks.map(({ name, action, Icon }, index) => (
+		return secondaryNavigationLinks.map(({ name, handleLinkClick, Icon }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
-				<button onClick={action} type={"button"}>
+				<motion.button
+					whileHover={{
+						scale: 1.15,
+						transition: {
+							type: "spring",
+							bounce: 0,
+							duration: 0.2
+						}
+					}}
+					whileTap={{
+						scale: 0.85,
+						transition: {
+							type: "spring",
+							bounce: 0,
+							duration: 0.15
+						}
+					}}
+					onClick={handleLinkClick}
+					type={"button"}
+				>
 					<span className="sr-only">{name}</span>
 					<Icon />
-				</button>
+				</motion.button>
 			</li>
 		));
 	};

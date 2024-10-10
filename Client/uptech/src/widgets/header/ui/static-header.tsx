@@ -17,7 +17,7 @@ export const StaticHeader: FC = () => {
 		<Fragment>
 			{currentWindowWidth && currentWindowWidth >= 990 && (
 				<header className="pl-[32rem] pr-[32rem] mt-[24rem] mb-[24rem] flex flex-row items-center justify-between max-h-[80rem]">
-					<Logotype colorScheme={"dark"} size={"medium"} />
+					<Logotype colorScheme="dark" size="medium" />
 					<PrimaryNavigation />
 					<SecondaryNavigation />
 				</header>
