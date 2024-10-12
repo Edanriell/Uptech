@@ -2,13 +2,15 @@ import { FC, JSX, useCallback, useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Link from "next/link";
 
-type NavigationLink = {
+import { useIsMounted } from "@shared/lib/hooks";
+
+type PrimaryNavigationLink = {
 	name: string;
 	href: string;
 	icon?: JSX.Element;
 };
 
-const primaryNavigationLinks: Array<NavigationLink> = [
+const primaryNavigationLinks: Array<PrimaryNavigationLink> = [
 	{
 		name: "Home",
 		href: "#"
@@ -34,18 +36,22 @@ const primaryNavigationLinks: Array<NavigationLink> = [
 export const PrimaryNavigation: FC = () => {
 	const [activeLink, setActiveLink] = useState(primaryNavigationLinks[0].name);
 
+	const isMounted = useIsMounted();
+
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const activeLinkElementRef = useRef<HTMLAnchorElement | null>(null);
 
 	const animationControls = useAnimationControls();
 
 	useEffect(() => {
-		const container = containerRef.current;
+		if (isMounted()) {
+			const container = containerRef.current;
 
-		if (container) {
-			const activeLinkElement = activeLinkElementRef.current;
+			if (container) {
+				const activeLinkElement = activeLinkElementRef.current;
 
-			calculateClipPath({ animationDuration: 0, container, activeLinkElement });
+				calculateClipPath({ animationDuration: 0, container, activeLinkElement });
+			}
 		}
 	});
 
@@ -88,7 +94,7 @@ export const PrimaryNavigation: FC = () => {
 		[]
 	);
 
-	const renderPrimaryNavigationLinks = useCallback(() => {
+	const renderPrimaryNavigationLinks = () => {
 		return primaryNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -106,9 +112,9 @@ export const PrimaryNavigation: FC = () => {
 				</Link>
 			</li>
 		));
-	}, [activeLink]);
+	};
 
-	const renderPrimaryNavigationLinksForClipPathContainer = useCallback(() => {
+	const renderPrimaryNavigationLinksForClipPathContainer = () => {
 		return primaryNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -126,7 +132,7 @@ export const PrimaryNavigation: FC = () => {
 				</Link>
 			</li>
 		));
-	}, [activeLink]);
+	};
 
 	return (
 		<nav className="relative flex flex-col items-center w-fit">

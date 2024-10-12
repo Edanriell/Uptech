@@ -1,14 +1,20 @@
-import { FC, useContext } from "react";
+import { FC, JSX } from "react";
 import { motion } from "framer-motion";
 
-import { HeaderContext } from "@widgets/header/model";
+import { useHeaderContext } from "@widgets/header/lib";
 
 import { Icon } from "@shared/ui/icon/ui";
 
-export const SecondaryNavigation: FC = () => {
-	const { toggleSearch, toggleUserProfile, toggleCart } = useContext(HeaderContext);
+type SecondaryNavigationLink = {
+	name: string;
+	handleLinkClick: () => void;
+	Icon: () => JSX.Element;
+};
 
-	const secondaryNavigationLinks = [
+export const SecondaryNavigation: FC = () => {
+	const { toggleSearch, toggleUserProfile, toggleCart } = useHeaderContext();
+
+	const secondaryNavigationLinks: Array<SecondaryNavigationLink> = [
 		{
 			name: "Search",
 			handleLinkClick: toggleSearch,

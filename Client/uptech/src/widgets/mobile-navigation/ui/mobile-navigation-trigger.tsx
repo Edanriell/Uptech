@@ -1,9 +1,9 @@
 "use client";
 
-import { ComponentPropsWithoutRef, FC, useContext } from "react";
+import { ComponentPropsWithoutRef, FC } from "react";
 import { motion, MotionProps } from "framer-motion";
 
-import { HeaderContext } from "@widgets/header/model";
+import { useHeaderContext } from "@widgets/header/lib";
 
 type MobileNavigationTriggerProps = {
 	classes?: string;
@@ -14,7 +14,7 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 	classes,
 	...restProps
 }) => {
-	const { mobileNavigationState, toggleMobileNavigation } = useContext(HeaderContext);
+	const { mobileNavigationState, toggleMobileNavigation } = useHeaderContext();
 
 	return (
 		<motion.button

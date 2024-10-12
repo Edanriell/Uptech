@@ -1,22 +1,13 @@
 "use client";
 
-import {
-	ComponentPropsWithoutRef,
-	FC,
-	JSX,
-	useCallback,
-	useContext,
-	useEffect,
-	useRef,
-	useState
-} from "react";
+import { ComponentPropsWithoutRef, FC, JSX, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, MotionProps, useAnimationControls } from "framer-motion";
 import Link from "next/link";
 
-import { HeaderContext } from "@widgets/header/model";
+import { useHeaderContext } from "@widgets/header/lib";
 
 import { Icon } from "@shared/ui/icon/ui";
-import { useWindowSize } from "@shared/lib/hooks";
+import { useIsMounted, useWindowSize } from "@shared/lib/hooks";
 
 type PrimaryMobileNavigationProps = {
 	classes?: string;
@@ -27,6 +18,12 @@ type PrimaryMobileNavigationLink = {
 	name: string;
 	href: string;
 	icon?: JSX.Element;
+};
+
+type SecondaryMobileNavigationLink = {
+	name: string;
+	handleLinkClick: () => void;
+	Icon: () => JSX.Element;
 };
 
 const primaryMobileNavigationLinks: Array<PrimaryMobileNavigationLink> = [
@@ -53,16 +50,28 @@ const primaryMobileNavigationLinks: Array<PrimaryMobileNavigationLink> = [
 ];
 
 export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) => {
-	const { mobileNavigationState, toggleCart, toggleUserProfile, toggleSearch } =
-		useContext(HeaderContext);
+	const { mobileNavigationState, toggleCart, toggleUserProfile, toggleSearch } = useHeaderContext();
 	const [activeLink, setActiveLink] = useState(primaryMobileNavigationLinks[0].name);
 
 	const { width } = useWindowSize();
+	const isMounted = useIsMounted();
 
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const activeLinkElementRef = useRef<HTMLAnchorElement | null>(null);
 
 	const animationControls = useAnimationControls();
+
+	useEffect(() => {
+		if (isMounted()) {
+			const container = containerRef.current;
+
+			if (container) {
+				const activeLinkElement = activeLinkElementRef.current;
+
+				calculateClipPath({ animationDuration: 0, container, activeLinkElement });
+			}
+		}
+	});
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -72,7 +81,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 
 			calculateClipPath({ animationDuration: 0, container, activeLinkElement });
 		}
-	});
+	}, [width]);
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -84,39 +93,36 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 		}
 	}, [activeLink, activeLinkElementRef, containerRef]);
 
-	const calculateClipPath = useCallback(
-		({
-			animationDuration,
-			container,
-			activeLinkElement
-		}: {
-			animationDuration: number;
-			container: HTMLDivElement;
-			activeLinkElement: HTMLAnchorElement | null;
-		}) => {
-			if (activeLinkElement) {
-				const { offsetLeft, offsetWidth, offsetTop, offsetHeight } = activeLinkElement;
+	const calculateClipPath = ({
+		animationDuration,
+		container,
+		activeLinkElement
+	}: {
+		animationDuration: number;
+		container: HTMLDivElement;
+		activeLinkElement: HTMLAnchorElement | null;
+	}) => {
+		if (activeLinkElement) {
+			const { offsetLeft, offsetWidth, offsetTop, offsetHeight } = activeLinkElement;
 
-				const clipLeft = offsetLeft;
-				const clipRight = offsetLeft + offsetWidth;
+			const clipLeft = offsetLeft;
+			const clipRight = offsetLeft + offsetWidth;
 
-				const clipTop = offsetTop;
-				const clipBottom = offsetTop + offsetHeight;
+			const clipTop = offsetTop;
+			const clipBottom = offsetTop + offsetHeight;
 
-				animationControls.start({
-					transition: {
-						duration: animationDuration,
-						type: "spring",
-						bounce: 0
-					},
-					clipPath: `inset(${clipTop}px ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% ${container.offsetHeight - clipBottom}px ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
-				});
-			}
-		},
-		[]
-	);
+			animationControls.start({
+				transition: {
+					duration: animationDuration,
+					type: "spring",
+					bounce: 0
+				},
+				clipPath: `inset(${clipTop}px ${Number(100 - (clipRight / container.offsetWidth) * 100).toFixed()}% ${container.offsetHeight - clipBottom}px ${Number((clipLeft / container.offsetWidth) * 100).toFixed()}% round 17px)`
+			});
+		}
+	};
 
-	const secondaryMobileNavigationLinks = [
+	const secondaryMobileNavigationLinks: Array<SecondaryMobileNavigationLink> = [
 		{
 			name: "Search",
 			handleLinkClick: toggleSearch,
@@ -134,7 +140,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 		}
 	];
 
-	const renderPrimaryMobileNavigationLinks = useCallback(() => {
+	const renderPrimaryMobileNavigationLinks = () => {
 		return primaryMobileNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -152,9 +158,9 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</Link>
 			</li>
 		));
-	}, [activeLink]);
+	};
 
-	const renderPrimaryMobileNavigationLinksForClipPathContainer = useCallback(() => {
+	const renderPrimaryMobileNavigationLinksForClipPathContainer = () => {
 		return primaryMobileNavigationLinks.map(({ name, href, icon = null }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<Link
@@ -172,9 +178,9 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</Link>
 			</li>
 		));
-	}, [activeLink]);
+	};
 
-	const renderSecondaryMobileNavigationLinks = useCallback(() => {
+	const renderSecondaryMobileNavigationLinks = () => {
 		return secondaryMobileNavigationLinks.map(({ name, handleLinkClick, Icon }, index) => (
 			<li key={index + "-" + name.toLowerCase()}>
 				<motion.button
@@ -202,7 +208,7 @@ export const MobileNavigation: FC<PrimaryMobileNavigationProps> = ({ classes }) 
 				</motion.button>
 			</li>
 		));
-	}, []);
+	};
 
 	return (
 		<AnimatePresence>
