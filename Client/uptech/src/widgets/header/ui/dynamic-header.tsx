@@ -1,14 +1,17 @@
-import { FC, Fragment, useContext, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls, useMotionValueEvent, useScroll } from "framer-motion";
 
 import { MobileNavigationTrigger } from "@widgets/mobile-navigation/ui";
 import { PrimaryNavigation, SecondaryNavigation } from "@widgets/navigation/ui";
-import { HeaderContext } from "@widgets/header/model";
 
 import { Logotype } from "@shared/ui/logotype/ui";
 import { useWindowSize } from "@shared/lib/hooks";
 
+import { useHeaderContext } from "../lib";
+
 const DynamicHeader: FC = () => {
+	const { mobileNavigationState, toggleMobileNavigation } = useHeaderContext();
+
 	const [headerState, setHeaderState] = useState<"visible" | "hidden">("hidden");
 	// State for header is necessary, because if we don't use it
 	// Animations (animation.start("visible") and animation.start("hidden"))
@@ -21,8 +24,6 @@ const DynamicHeader: FC = () => {
 	// When visible animation is triggering second time we will display it
 	// When we are at top of the page we reset counter to 0 and start counting again
 	// There is no other way around it because we are using delta
-
-	const { mobileNavigationState, toggleMobileNavigation } = useContext(HeaderContext);
 
 	const { width } = useWindowSize();
 	const { scrollY } = useScroll();
