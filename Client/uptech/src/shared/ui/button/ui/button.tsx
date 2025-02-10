@@ -1,10 +1,14 @@
 "use client";
 
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, type ReactNode } from "react";
 import clsx from "clsx";
 import { motion, MotionConfig, type Transition } from "motion/react";
 
-import { generateClipPath } from "../lib/functions";
+import { ButtonProvider } from "../model";
+import { useButtonStore } from "../lib/hooks";
+
+import { PrimaryLayer } from "./primary-layer";
+import { SecondaryLayer } from "./secondary-layer";
 
 export type Orientation =
 	| "top-to-bottom"
@@ -16,73 +20,50 @@ export type Orientation =
 	| "top-right-to-bottom-left"
 	| "bottom-left-to-top-right";
 
+type ButtonComponents = {
+	PrimaryLayer: typeof PrimaryLayer;
+	SecondaryLayer: typeof SecondaryLayer;
+	Provider: typeof ButtonProvider;
+};
+
 type ButtonProps = {
 	children: ReactNode;
-	primaryColor: string;
-	secondaryColor: string;
-	primaryComponentClasses?: string;
-	secondaryComponentClasses?: string;
 	type?: "submit" | "button" | "reset";
 	className?: string;
-	orientation?: Orientation;
 	transitionOptions?: Transition;
 };
 
-export const Button: FC<ButtonProps> = ({
+type Button = FC<ButtonProps> & ButtonComponents;
+
+export const Button: Button = ({
 	children,
 	type = "button",
-	primaryColor,
-	secondaryColor,
-	primaryComponentClasses,
-	secondaryComponentClasses,
 	className,
-	orientation = "top-left-to-bottom-right",
 	transitionOptions = { type: "spring", duration: 1, bounce: 0 }
 }) => {
-	const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
+	const { toggleIsButtonHovered } = useButtonStore();
 
 	const buttonClasses = clsx(
 		"max-h-[50rem] w-full h-[50rem] tablet:basis-[149rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
 		className
 	);
 
-	const primaryButtonComponentClasses = clsx(
-		"px-[32rem] py-[16rem] absolute inset-0",
-		primaryComponentClasses,
-		primaryColor
-	);
-
-	const secondaryButtonComponentClasses = clsx(
-		"px-[32rem] py-[16rem] absolute inset-0",
-		secondaryComponentClasses,
-		secondaryColor
-	);
-
-	const handleButtonHover = () => setIsButtonHovered((prev) => !prev);
-
 	return (
 		<MotionConfig transition={transitionOptions}>
 			<motion.button
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
-				onMouseEnter={handleButtonHover}
-				onMouseLeave={handleButtonHover}
+				onMouseEnter={toggleIsButtonHovered}
+				onMouseLeave={toggleIsButtonHovered}
 				className={buttonClasses}
 				type={type}
 			>
-				<span className={primaryButtonComponentClasses}>{children}</span>
-				<motion.span
-					initial={{
-						clipPath: generateClipPath({ orientation, isButtonHovered: false })
-					}}
-					animate={{
-						clipPath: generateClipPath({ orientation, isButtonHovered })
-					}}
-					className={secondaryButtonComponentClasses}
-				>
-					{children}
-				</motion.span>
+				{children}
 			</motion.button>
 		</MotionConfig>
 	);
 };
+
+Button.Provider = ButtonProvider;
+Button.PrimaryLayer = PrimaryLayer;
+Button.SecondaryLayer = SecondaryLayer;
