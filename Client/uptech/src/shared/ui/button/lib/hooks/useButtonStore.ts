@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { ButtonContext, ButtonStore } from "@shared/ui/button/model";
+import { ButtonContext, ButtonStore } from "../../model";
 
 export const useButtonStore = (): ButtonStore => {
 	const context = useContext(ButtonContext);

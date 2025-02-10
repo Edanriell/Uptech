@@ -6,15 +6,15 @@ type ButtonProviderProps = {
 };
 
 export const ButtonProvider = ({ children }: ButtonProviderProps) => {
-	const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
+	const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
 
-	const toggleIsButtonHovered = () => setIsButtonHovered((prev) => !prev);
+	const toggleButtonActiveState = () => setIsButtonActive((prev) => !prev);
 
 	return (
 		<ButtonContext.Provider
 			value={{
-				isButtonHovered,
-				toggleIsButtonHovered
+				isButtonActive,
+				toggleButtonActiveState
 			}}
 		>
 			{children}

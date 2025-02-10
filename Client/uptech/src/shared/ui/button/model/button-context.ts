@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
 export type ButtonStore = {
-	isButtonHovered: boolean;
-	toggleIsButtonHovered: () => void;
+	isButtonActive: boolean;
+	toggleButtonActiveState: () => void;
 };
 
 export const ButtonContext = createContext<ButtonStore | null>(null);

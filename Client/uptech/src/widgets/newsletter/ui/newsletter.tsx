@@ -54,36 +54,19 @@ export const Newsletter: FC = () => {
 						)}
 					</AnimatePresence>
 				</div>
-				{/*<Button*/}
-				{/*	primaryColor="bg-white-900"*/}
-				{/*	primaryComponentClasses="text-white-50"*/}
-				{/*	secondaryColor="bg-white-50"*/}
-				{/*	secondaryComponentClasses="text-shark-950"*/}
-				{/*	transitionOptions={{ type: "spring", duration: 0.65, bounce: 0 }}*/}
-				{/*	className="tablet:min-w-[149rem]"*/}
-				{/*	type="submit"*/}
-				{/*>*/}
-				{/*	Subscribe*/}
-				{/*</Button>*/}
 				<Button.Provider>
 					<Button
 						className="tablet:min-w-[149rem]"
 						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0 }}
 						type="submit"
 					>
-						<Button.PrimaryLayer className="text-white-50">
+						<Button.StaticLayer className="text-white-50">Subscribe</Button.StaticLayer>
+						<Button.DynamicLayer className="text-shark-950">
 							Subscribe
-						</Button.PrimaryLayer>
-						<Button.SecondaryLayer className="text-shark-950">
-							Subscribe
-						</Button.SecondaryLayer>
+						</Button.DynamicLayer>
 					</Button>
 				</Button.Provider>
 			</form>
 		</div>
 	);
 };
-
-// TODO Refactor Button
-// Button.PrimaryLayer
-// Button.SecondaryLayer

@@ -7,32 +7,32 @@ import { useButtonStore } from "../lib/hooks/useButtonStore";
 
 import { Orientation } from "./button";
 
-type SecondaryLayerProps = {
+type DynamicLayerProps = {
 	children: ReactNode;
-	orientation?: Orientation;
 	className?: string;
+	orientation?: Orientation;
 	color?: string;
 };
 
-export const SecondaryLayer: FC<SecondaryLayerProps> = ({
+export const DynamicLayer: FC<DynamicLayerProps> = ({
 	children,
-	orientation = "top-left-to-bottom-right",
 	className,
+	orientation = "top-left-to-bottom-right",
 	color = "bg-white-50"
 }) => {
-	const { isButtonHovered } = useButtonStore();
+	const { isButtonActive } = useButtonStore();
 
-	const secondaryLayerClasses = clsx("px-[32rem] py-[16rem] absolute inset-0", className, color);
+	const dynamicLayerClasses = clsx("px-[32rem] py-[16rem] absolute inset-0", className, color);
 
 	return (
 		<motion.span
 			initial={{
-				clipPath: generateClipPath({ orientation, isButtonHovered: false })
+				clipPath: generateClipPath({ orientation, isButtonActive: false })
 			}}
 			animate={{
-				clipPath: generateClipPath({ orientation, isButtonHovered })
+				clipPath: generateClipPath({ orientation, isButtonActive })
 			}}
-			className={secondaryLayerClasses}
+			className={dynamicLayerClasses}
 		>
 			{children}
 		</motion.span>

@@ -7,8 +7,8 @@ import { motion, MotionConfig, type Transition } from "motion/react";
 import { ButtonProvider } from "../model";
 import { useButtonStore } from "../lib/hooks";
 
-import { PrimaryLayer } from "./primary-layer";
-import { SecondaryLayer } from "./secondary-layer";
+import { StaticLayer } from "./static-layer";
+import { DynamicLayer } from "./dynamic-layer";
 
 export type Orientation =
 	| "top-to-bottom"
@@ -21,8 +21,8 @@ export type Orientation =
 	| "bottom-left-to-top-right";
 
 type ButtonComponents = {
-	PrimaryLayer: typeof PrimaryLayer;
-	SecondaryLayer: typeof SecondaryLayer;
+	StaticLayer: typeof StaticLayer;
+	DynamicLayer: typeof DynamicLayer;
 	Provider: typeof ButtonProvider;
 };
 
@@ -37,11 +37,11 @@ type Button = FC<ButtonProps> & ButtonComponents;
 
 export const Button: Button = ({
 	children,
-	type = "button",
 	className,
+	type = "button",
 	transitionOptions = { type: "spring", duration: 1, bounce: 0 }
 }) => {
-	const { toggleIsButtonHovered } = useButtonStore();
+	const { toggleButtonActiveState } = useButtonStore();
 
 	const buttonClasses = clsx(
 		"max-h-[50rem] w-full h-[50rem] tablet:basis-[149rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
@@ -53,8 +53,12 @@ export const Button: Button = ({
 			<motion.button
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
-				onMouseEnter={toggleIsButtonHovered}
-				onMouseLeave={toggleIsButtonHovered}
+				onMouseEnter={toggleButtonActiveState}
+				onMouseLeave={toggleButtonActiveState}
+				onTouchStart={toggleButtonActiveState}
+				onTouchEnd={toggleButtonActiveState}
+				onFocus={toggleButtonActiveState}
+				onBlur={toggleButtonActiveState}
 				className={buttonClasses}
 				type={type}
 			>
@@ -65,5 +69,5 @@ export const Button: Button = ({
 };
 
 Button.Provider = ButtonProvider;
-Button.PrimaryLayer = PrimaryLayer;
-Button.SecondaryLayer = SecondaryLayer;
+Button.StaticLayer = StaticLayer;
+Button.DynamicLayer = DynamicLayer;
