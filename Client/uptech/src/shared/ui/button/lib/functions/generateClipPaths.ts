@@ -2,10 +2,10 @@ import { Orientation } from "../../ui";
 
 type generateClipPathParameters = {
 	orientation: Orientation;
-	isButtonHovered: boolean;
+	isButtonActive: boolean;
 };
 
-export const generateClipPath = ({ orientation, isButtonHovered }: generateClipPathParameters) => {
+export const generateClipPath = ({ orientation, isButtonActive }: generateClipPathParameters) => {
 	const orientationClipPathVariants = {
 		"top-to-bottom": {
 			initial: "inset(0 0 100% 0)",
@@ -42,5 +42,5 @@ export const generateClipPath = ({ orientation, isButtonHovered }: generateClipP
 	};
 
 	const { initial, final } = orientationClipPathVariants[orientation];
-	return isButtonHovered ? final : initial;
+	return isButtonActive ? final : initial;
 };
