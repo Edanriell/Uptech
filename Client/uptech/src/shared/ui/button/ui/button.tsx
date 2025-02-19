@@ -1,8 +1,8 @@
 "use client";
 
-import { type FC, type ReactNode } from "react";
+import { type ComponentPropsWithoutRef, type FC, type ReactNode } from "react";
 import clsx from "clsx";
-import { motion, MotionConfig, type Transition } from "motion/react";
+import { motion, MotionConfig, type MotionProps, type Transition } from "motion/react";
 
 import { ButtonProvider } from "../model";
 import { useButtonStore } from "../lib/hooks";
@@ -31,7 +31,8 @@ type ButtonProps = {
 	type?: "submit" | "button" | "reset";
 	className?: string;
 	transitionOptions?: Transition;
-};
+} & ComponentPropsWithoutRef<"button"> &
+	MotionProps;
 
 type Button = FC<ButtonProps> & ButtonComponents;
 
@@ -39,12 +40,13 @@ export const Button: Button = ({
 	children,
 	className,
 	type = "button",
-	transitionOptions = { type: "spring", duration: 1, bounce: 0 }
+	transitionOptions = { type: "spring", duration: 1, bounce: 0 },
+	...rest
 }) => {
 	const { toggleButtonActiveState } = useButtonStore();
 
 	const buttonClasses = clsx(
-		"max-h-[50rem] w-full h-[50rem] tablet:basis-[149rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
+		"max-h-[50rem] w-full h-[50rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
 		className
 	);
 
@@ -61,6 +63,7 @@ export const Button: Button = ({
 				onBlur={toggleButtonActiveState}
 				className={buttonClasses}
 				type={type}
+				{...rest}
 			>
 				{children}
 			</motion.button>

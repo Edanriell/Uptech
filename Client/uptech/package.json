@@ -10,29 +10,27 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.10.0",
-		"@react-spring/web": "^9.7.5",
 		"clsx": "^2.1.1",
 		"motion": "12.0.0",
-		"next": "15.1.6",
+		"next": "15.1.7",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-hook-form": "^7.54.2",
-		"react-spring": "^9.7.5",
 		"sanitize.css": "^13.0.0",
 		"uuid": "^11.0.5",
 		"yup": "^1.6.1",
 		"zustand": "^5.0.3"
 	},
 	"devDependencies": {
-		"@types/node": "^20.17.17",
+		"@types/node": "^20.17.19",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",
 		"eslint": "^8.57.1",
 		"eslint-config-next": "15.1.0",
-		"postcss": "^8.5.1",
-		"prettier": "^3.5.0",
+		"postcss": "^8.5.2",
+		"prettier": "^3.5.1",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.7.3"
 	},
-	"packageManager": "pnpm@10.2.1+sha512.398035c7bd696d0ba0b10a688ed558285329d27ea994804a52bad9167d8e3a72bcb993f9699585d3ca25779ac64949ef422757a6c31102c12ab932e5cbe5cc92"
+	"packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af"
 }

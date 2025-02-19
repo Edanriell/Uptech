@@ -1,24 +1,58 @@
 "use client";
 
-import { type FC } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AnimatePresence, motion } from "motion/react";
 
 import { Button } from "@shared/ui/button/ui";
+import { Spinner } from "@shared/ui/spinner/ui";
 
 import { newsletterFormSchema } from "../model";
 
 export const Newsletter: FC = () => {
+	const [newsletterFormState, setNewsletterFormState] = useState<
+		"idle" | "loading" | "success" | "failure"
+	>("idle");
+
 	const {
 		register,
 		handleSubmit,
-		formState: { errors }
+		formState: { errors, isLoading, isSubmitting, isSubmitted, isSubmitSuccessful, isValid }
 	} = useForm({
 		resolver: yupResolver(newsletterFormSchema)
 	});
 
-	const handleNewsletterFormSubmit = (data) => console.log(data);
+	useEffect(() => {
+		console.log(isLoading + " isLoading");
+		console.log(isSubmitting + " isSubmitting");
+		console.log(isSubmitted + " isSubmitted");
+		console.log(isSubmitSuccessful + " isSubmitSuccessful");
+	}, [isLoading, isSubmitting, isSubmitted, isSubmitSuccessful]);
+
+	const handleNewsletterFormSubmit = async (data: { email: string }) => {
+		const randomNumber = Math.floor(Math.random() * 11);
+
+		const fakeDataSend = new Promise<string>((resolve, reject) => {
+			setTimeout(() => {
+				if (randomNumber >= 5) {
+					resolve("Subscription successful!");
+				} else {
+					reject("Subscription failed. Please try again.");
+				}
+			}, 65000);
+		});
+
+		try {
+			setNewsletterFormState("loading");
+			const result = await fakeDataSend;
+			setNewsletterFormState("success");
+			console.log("Data sent successfully:", result);
+		} catch (error) {
+			setNewsletterFormState("failure");
+			console.error("Data failed to send:", error);
+		}
+	};
 
 	return (
 		<div className="tablet:mr-[40rem] tablet:basis-[477rem] desktop:mr-[unset]">
@@ -29,7 +63,7 @@ export const Newsletter: FC = () => {
 				onSubmit={handleSubmit(handleNewsletterFormSubmit)}
 				className="flex flex-col gap-y-[8rem] mb-[40rem] tablet:flex-row tablet:gap-x-[8rem] tablet:mb-[unset]"
 			>
-				<div className="relative w-full tablet:basis-[320rem]">
+				<div className="relative w-full tablet:basis-[320rem] tablet:shrink-0">
 					<label className="visually-hidden" htmlFor="email">
 						Enter your email
 					</label>
@@ -60,9 +94,51 @@ export const Newsletter: FC = () => {
 						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0 }}
 						type="submit"
 					>
-						<Button.StaticLayer className="text-white-50">Subscribe</Button.StaticLayer>
-						<Button.DynamicLayer className="text-shark-950">
-							Subscribe
+						<Button.StaticLayer className="flex items-center justify-center">
+							<AnimatePresence mode="popLayout" initial={false}>
+								<motion.span
+									transition={{
+										type: "spring",
+										duration: 2,
+										bounce: 0
+									}}
+									initial={{ opacity: 0, y: -50 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: 50 }}
+									key={newsletterFormState}
+								>
+									{newsletterFormState === "loading" ? (
+										<Spinner width={32} height={32} />
+									) : (
+										<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
+											Subscribe
+										</span>
+									)}
+								</motion.span>
+							</AnimatePresence>
+						</Button.StaticLayer>
+						<Button.DynamicLayer className="flex items-center justify-center">
+							<AnimatePresence mode="popLayout" initial={false}>
+								<motion.span
+									transition={{
+										type: "spring",
+										duration: 2,
+										bounce: 0
+									}}
+									initial={{ opacity: 0, y: -50 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: 50 }}
+									key={newsletterFormState}
+								>
+									{newsletterFormState === "loading" ? (
+										<Spinner width={32} height={32} />
+									) : (
+										<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
+											Subscribe
+										</span>
+									)}
+								</motion.span>
+							</AnimatePresence>
 						</Button.DynamicLayer>
 					</Button>
 				</Button.Provider>

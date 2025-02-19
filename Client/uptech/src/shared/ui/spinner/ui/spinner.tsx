@@ -33,7 +33,13 @@ export const Spinner: FC<SpinnerProps> = ({
 	});
 
 	return (
-		<div className="relative">
+		<div
+			className="relative"
+			style={{
+				width,
+				height
+			}}
+		>
 			<svg
 				className="absolute top-0 left-0 z-[1]"
 				xmlns="http://www.w3.org/2000/svg"
