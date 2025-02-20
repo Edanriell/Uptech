@@ -47,7 +47,7 @@ export const Footer: FC = () => {
 	return (
 		<footer className="relative bg-shark-950 z-[20]">
 			<div className="mr-[16rem] ml-[16rem] tablet:mr-[48rem] tablet:ml-[48rem] pt-[80rem] desktop:ml-[unset] desktop:mr-[unset] desktop:flex desktop:flex-col">
-				<div className="flex flex-col tablet:flex-row tablet:mx-[auto] tablet:justify-between tablet:max-w-[1048rem] desktop:max-w-[1248rem] tablet:items-start tablet:mb-[48rem]">
+				<div className="flex flex-col tablet:flex-row tablet:mx-[auto] tablet:justify-between tablet:max-w-[unset] desktop:max-w-[1248rem] tablet:items-start tablet:mb-[48rem]">
 					<Newsletter />
 					<FooterNavigation>
 						{Array.from(footerNavigationLinks.entries()).map(

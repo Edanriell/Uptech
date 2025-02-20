@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { Button } from "@shared/ui/button/ui";
 import { Spinner } from "@shared/ui/spinner/ui";
+import { useWindowSize } from "@shared/lib/hooks";
 
 import { newsletterFormSchema } from "../model";
 
@@ -14,6 +15,8 @@ export const Newsletter: FC = () => {
 	const [newsletterFormState, setNewsletterFormState] = useState<
 		"idle" | "loading" | "success" | "failure"
 	>("idle");
+
+	const { width } = useWindowSize();
 
 	const {
 		register,
@@ -114,21 +117,21 @@ export const Newsletter: FC = () => {
 
 	const submitButtonAnimationVariants = {
 		idle: {
-			width: "149rem"
+			width: width <= 990 ? "100%" : "149rem"
 		},
 		loading: {
-			width: "96rem"
+			width: width <= 990 ? "100%" : "96rem"
 		},
 		success: {
-			width: "188rem"
+			width: width <= 990 ? "100%" : "188rem"
 		},
 		failure: {
-			width: "170rem"
+			width: width <= 990 ? "100%" : "170rem"
 		}
 	};
 
 	return (
-		<div className="tablet:mr-[40rem] desktop:mr-[unset] tablet:basis-[477rem]">
+		<div className="tablet:basis-[43%] desktop:mr-[unset] desktop:basis-[477rem]">
 			<h2 className="text-[40rem] font-medium leading-[125%] text-white-50 mb-[24rem] opacity-[0.9]">
 				Stay Updated on Latest Product Releases
 			</h2>
@@ -213,7 +216,6 @@ export const Newsletter: FC = () => {
 
 // TODO
 // Submitt  button must be separated
-// Button must change width dynamically
 
 // TODO
 // Decompose input if it is not unique across website
