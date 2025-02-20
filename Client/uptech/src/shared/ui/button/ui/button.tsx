@@ -46,7 +46,7 @@ export const Button: Button = ({
 	const { toggleButtonActiveState } = useButtonStore();
 
 	const buttonClasses = clsx(
-		"max-h-[50rem] w-full h-[50rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
+		"w-full h-[50rem] max-h-[50rem] rounded-[44rem] font-medium text-[18rem] leading-[100%] capitalize cursor-pointer relative overflow-hidden",
 		className
 	);
 
@@ -60,8 +60,6 @@ export const Button: Button = ({
 				onMouseLeave={toggleButtonActiveState}
 				onTouchStart={toggleButtonActiveState}
 				onTouchEnd={toggleButtonActiveState}
-				onFocus={toggleButtonActiveState}
-				onBlur={toggleButtonActiveState}
 				className={buttonClasses}
 				type={type}
 				{...rest}

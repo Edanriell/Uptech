@@ -164,42 +164,41 @@ export const Newsletter: FC = () => {
 				<Button.Provider>
 					<Button
 						className="tablet:min-w-[149rem]"
-						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0 }}
+						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.25 }}
 						type="submit"
 						variants={submitButtonAnimationVariants}
 						animate={newsletterFormState}
+						initial={false}
 					>
-						<Button.StaticLayer className="flex items-center justify-center z-10">
+						<Button.StaticLayer className="flex items-center justify-center z-10 pointer-events-none">
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.span
 									transition={{
 										type: "spring",
-										duration: 2,
+										duration: 0.65,
 										bounce: 0
 									}}
 									initial={{ opacity: 0, y: -50 }}
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 50 }}
 									key={newsletterFormState}
-									className="relative"
 								>
 									{renderButtonStaticLayerContent(newsletterFormState)}
 								</motion.span>
 							</AnimatePresence>
 						</Button.StaticLayer>
-						<Button.DynamicLayer className="flex items-center justify-center z-20">
+						<Button.DynamicLayer className="flex items-center justify-center z-20 pointer-events-none">
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.span
 									transition={{
 										type: "spring",
-										duration: 2,
+										duration: 0.65,
 										bounce: 0
 									}}
 									initial={{ opacity: 0, y: -50 }}
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 50 }}
 									key={newsletterFormState}
-									className="relative"
 								>
 									{renderButtonDynamicLayerContent(newsletterFormState)}
 								</motion.span>
