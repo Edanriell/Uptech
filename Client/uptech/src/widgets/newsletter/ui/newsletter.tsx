@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useEffect, useState } from "react";
+import { type FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AnimatePresence, motion } from "motion/react";
@@ -18,17 +18,10 @@ export const Newsletter: FC = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isLoading, isSubmitting, isSubmitted, isSubmitSuccessful, isValid }
+		formState: { errors, isValid }
 	} = useForm({
 		resolver: yupResolver(newsletterFormSchema)
 	});
-
-	useEffect(() => {
-		console.log(isLoading + " isLoading");
-		console.log(isSubmitting + " isSubmitting");
-		console.log(isSubmitted + " isSubmitted");
-		console.log(isSubmitSuccessful + " isSubmitSuccessful");
-	}, [isLoading, isSubmitting, isSubmitted, isSubmitSuccessful]);
 
 	const handleNewsletterFormSubmit = async (data: { email: string }) => {
 		const randomNumber = Math.floor(Math.random() * 11);
@@ -40,7 +33,7 @@ export const Newsletter: FC = () => {
 				} else {
 					reject("Subscription failed. Please try again.");
 				}
-			}, 65000);
+			}, 5000);
 		});
 
 		try {
@@ -51,11 +44,91 @@ export const Newsletter: FC = () => {
 		} catch (error) {
 			setNewsletterFormState("failure");
 			console.error("Data failed to send:", error);
+		} finally {
+			setTimeout(() => {
+				setNewsletterFormState("idle");
+			}, 5000);
+		}
+	};
+
+	const renderButtonStaticLayerContent = (state: typeof newsletterFormState) => {
+		switch (state) {
+			case "idle":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
+						Subscribe
+					</span>
+				);
+			case "loading":
+				return <Spinner width={32} height={32} />;
+			case "success":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
+						Subscription successful!
+					</span>
+				);
+			case "failure":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
+						Subscription failed.
+					</span>
+				);
+			default:
+				return null;
+		}
+	};
+
+	const renderButtonDynamicLayerContent = (state: typeof newsletterFormState) => {
+		switch (state) {
+			case "idle":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
+						Subscribe
+					</span>
+				);
+			case "loading":
+				return (
+					<Spinner
+						width={32}
+						height={32}
+						primaryColor="rgba(0,0,0, 0.25)"
+						secondaryColor="rgba(0,0,0, 1)"
+					/>
+				);
+			case "success":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
+						Subscription successful!
+					</span>
+				);
+			case "failure":
+				return (
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
+						Subscription failed.
+					</span>
+				);
+			default:
+				return null;
+		}
+	};
+
+	const submitButtonAnimationVariants = {
+		idle: {
+			width: "149rem"
+		},
+		loading: {
+			width: "149rem"
+		},
+		success: {
+			width: "272rem"
+		},
+		failure: {
+			width: "228rem"
 		}
 	};
 
 	return (
-		<div className="tablet:mr-[40rem] tablet:basis-[477rem] desktop:mr-[unset]">
+		<div className="tablet:mr-[40rem] desktop:mr-[unset]">
 			<h2 className="text-[40rem] font-medium leading-[125%] text-white-50 mb-[24rem] opacity-[0.9]">
 				Stay Updated on Latest Product Releases
 			</h2>
@@ -93,8 +166,10 @@ export const Newsletter: FC = () => {
 						className="tablet:min-w-[149rem]"
 						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0 }}
 						type="submit"
+						variants={submitButtonAnimationVariants}
+						animate={newsletterFormState}
 					>
-						<Button.StaticLayer className="flex items-center justify-center">
+						<Button.StaticLayer className="flex items-center justify-center z-10">
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.span
 									transition={{
@@ -106,18 +181,13 @@ export const Newsletter: FC = () => {
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 50 }}
 									key={newsletterFormState}
+									className="relative"
 								>
-									{newsletterFormState === "loading" ? (
-										<Spinner width={32} height={32} />
-									) : (
-										<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
-											Subscribe
-										</span>
-									)}
+									{renderButtonStaticLayerContent(newsletterFormState)}
 								</motion.span>
 							</AnimatePresence>
 						</Button.StaticLayer>
-						<Button.DynamicLayer className="flex items-center justify-center">
+						<Button.DynamicLayer className="flex items-center justify-center z-20">
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.span
 									transition={{
@@ -129,14 +199,9 @@ export const Newsletter: FC = () => {
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 50 }}
 									key={newsletterFormState}
+									className="relative"
 								>
-									{newsletterFormState === "loading" ? (
-										<Spinner width={32} height={32} />
-									) : (
-										<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
-											Subscribe
-										</span>
-									)}
+									{renderButtonDynamicLayerContent(newsletterFormState)}
 								</motion.span>
 							</AnimatePresence>
 						</Button.DynamicLayer>
@@ -146,3 +211,19 @@ export const Newsletter: FC = () => {
 		</div>
 	);
 };
+
+// TODO
+// Submitt  button must be separated
+// Create render fucnction of content button with ifs or switch doesent matter
+// Button must change width dynamically
+
+// TODO
+// Decompose input if it is not unique across website
+
+// TODO
+// Buttons of drawer must highlight when drawer opened, we can use red color crimson 600
+// Also drawer exit animation must use radix
+// Refactor all components to useHook pattern if possible
+
+// TODO
+// Create ThreeJs slider !!!!!!!!!!

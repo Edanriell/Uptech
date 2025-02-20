@@ -53,6 +53,7 @@ export const Button: Button = ({
 	return (
 		<MotionConfig transition={transitionOptions}>
 			<motion.button
+				layout
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
 				onMouseEnter={toggleButtonActiveState}
