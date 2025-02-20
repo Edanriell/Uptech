@@ -12,7 +12,7 @@ export const StaticLayer: FC<StaticLayerProps> = ({
 	className,
 	color = "bg-white-900"
 }) => {
-	const staticLayerClasses = clsx("px-[32rem] py-[16rem] absolute inset-0", className, color);
+	const staticLayerClasses = clsx("absolute inset-0", className, color);
 
 	return <span className={staticLayerClasses}>{children}</span>;
 };

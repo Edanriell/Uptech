@@ -22,7 +22,7 @@ export const DynamicLayer: FC<DynamicLayerProps> = ({
 }) => {
 	const { isButtonActive } = useButtonStore();
 
-	const dynamicLayerClasses = clsx("px-[32rem] py-[16rem] absolute inset-0", className, color);
+	const dynamicLayerClasses = clsx("absolute inset-0", className, color);
 
 	return (
 		<motion.span
