@@ -4,12 +4,11 @@ import { type FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AnimatePresence, motion } from "motion/react";
-
-import { Button } from "@shared/ui/button/ui";
-import { Spinner } from "@shared/ui/spinner/ui";
 import { useWindowSize } from "@shared/lib/hooks";
 
 import { newsletterFormSchema } from "../model";
+
+import { NewsletterSubmitButton } from "./newsletter-submit-button";
 
 export const Newsletter: FC = () => {
 	const [newsletterFormState, setNewsletterFormState] = useState<
@@ -54,82 +53,6 @@ export const Newsletter: FC = () => {
 		}
 	};
 
-	const renderButtonStaticLayerContent = (state: typeof newsletterFormState) => {
-		switch (state) {
-			case "idle":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
-						Subscribe
-					</span>
-				);
-			case "loading":
-				return <Spinner width={32} height={32} />;
-			case "success":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
-						Subscribed 🎉
-					</span>
-				);
-			case "failure":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
-						Try again ❌
-					</span>
-				);
-			default:
-				return null;
-		}
-	};
-
-	const renderButtonDynamicLayerContent = (state: typeof newsletterFormState) => {
-		switch (state) {
-			case "idle":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
-						Subscribe
-					</span>
-				);
-			case "loading":
-				return (
-					<Spinner
-						width={32}
-						height={32}
-						primaryColor="rgba(0,0,0, 0.25)"
-						secondaryColor="rgba(0,0,0, 1)"
-					/>
-				);
-			case "success":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
-						Subscribed 🎉
-					</span>
-				);
-			case "failure":
-				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
-						Try again ❌
-					</span>
-				);
-			default:
-				return null;
-		}
-	};
-
-	const submitButtonAnimationVariants = {
-		idle: {
-			width: width <= 990 ? "100%" : "149rem"
-		},
-		loading: {
-			width: width <= 990 ? "100%" : "96rem"
-		},
-		success: {
-			width: width <= 990 ? "100%" : "188rem"
-		},
-		failure: {
-			width: width <= 990 ? "100%" : "170rem"
-		}
-	};
-
 	return (
 		<div className="tablet:basis-[43%] desktop:mr-[unset] desktop:basis-[477rem]">
 			<h2 className="text-[40rem] font-medium leading-[125%] text-white-50 mb-[24rem] opacity-[0.9]">
@@ -164,58 +87,11 @@ export const Newsletter: FC = () => {
 						)}
 					</AnimatePresence>
 				</div>
-				<Button.Provider>
-					<Button
-						className="tablet:w-[149rem]"
-						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.35 }}
-						type="submit"
-						variants={submitButtonAnimationVariants}
-						animate={newsletterFormState}
-						initial={false}
-					>
-						<Button.StaticLayer className="flex items-center justify-center z-10 pointer-events-none">
-							<AnimatePresence mode="popLayout" initial={false}>
-								<motion.span
-									transition={{
-										type: "spring",
-										duration: 1.5,
-										bounce: 0.35
-									}}
-									initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
-									animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
-									exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
-									key={newsletterFormState}
-								>
-									{renderButtonStaticLayerContent(newsletterFormState)}
-								</motion.span>
-							</AnimatePresence>
-						</Button.StaticLayer>
-						<Button.DynamicLayer className="flex items-center justify-center z-20 pointer-events-none">
-							<AnimatePresence mode="popLayout" initial={false}>
-								<motion.span
-									transition={{
-										type: "spring",
-										duration: 1.5,
-										bounce: 0.35
-									}}
-									initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
-									animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
-									exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
-									key={newsletterFormState}
-								>
-									{renderButtonDynamicLayerContent(newsletterFormState)}
-								</motion.span>
-							</AnimatePresence>
-						</Button.DynamicLayer>
-					</Button>
-				</Button.Provider>
+				<NewsletterSubmitButton windowWidth={width} formState={newsletterFormState} />
 			</form>
 		</div>
 	);
 };
-
-// TODO
-// Submitt  button must be separated
 
 // TODO
 // Decompose input if it is not unique across website
