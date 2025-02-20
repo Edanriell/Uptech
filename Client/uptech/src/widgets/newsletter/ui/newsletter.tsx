@@ -18,7 +18,7 @@ export const Newsletter: FC = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isValid }
+		formState: { errors }
 	} = useForm({
 		resolver: yupResolver(newsletterFormSchema)
 	});
@@ -55,7 +55,7 @@ export const Newsletter: FC = () => {
 		switch (state) {
 			case "idle":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
 						Subscribe
 					</span>
 				);
@@ -63,14 +63,14 @@ export const Newsletter: FC = () => {
 				return <Spinner width={32} height={32} />;
 			case "success":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
-						Subscription successful!
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
+						Subscribed 🎉
 					</span>
 				);
 			case "failure":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50">
-						Subscription failed.
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
+						Try again ❌
 					</span>
 				);
 			default:
@@ -82,7 +82,7 @@ export const Newsletter: FC = () => {
 		switch (state) {
 			case "idle":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
 						Subscribe
 					</span>
 				);
@@ -97,14 +97,14 @@ export const Newsletter: FC = () => {
 				);
 			case "success":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
-						Subscription successful!
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
+						Subscribed 🎉
 					</span>
 				);
 			case "failure":
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950">
-						Subscription failed.
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
+						Try again ❌
 					</span>
 				);
 			default:
@@ -117,13 +117,13 @@ export const Newsletter: FC = () => {
 			width: "149rem"
 		},
 		loading: {
-			width: "149rem"
+			width: "96rem"
 		},
 		success: {
-			width: "272rem"
+			width: "188rem"
 		},
 		failure: {
-			width: "228rem"
+			width: "170rem"
 		}
 	};
 
@@ -163,8 +163,8 @@ export const Newsletter: FC = () => {
 				</div>
 				<Button.Provider>
 					<Button
-						className="tablet:min-w-[149rem]"
-						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.25 }}
+						className="tablet:w-[149rem]"
+						transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.35 }}
 						type="submit"
 						variants={submitButtonAnimationVariants}
 						animate={newsletterFormState}
@@ -175,12 +175,12 @@ export const Newsletter: FC = () => {
 								<motion.span
 									transition={{
 										type: "spring",
-										duration: 0.65,
-										bounce: 0
+										duration: 1.5,
+										bounce: 0.35
 									}}
-									initial={{ opacity: 0, y: -50 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: 50 }}
+									initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
+									animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
+									exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
 									key={newsletterFormState}
 								>
 									{renderButtonStaticLayerContent(newsletterFormState)}
@@ -192,12 +192,12 @@ export const Newsletter: FC = () => {
 								<motion.span
 									transition={{
 										type: "spring",
-										duration: 0.65,
-										bounce: 0
+										duration: 1.5,
+										bounce: 0.35
 									}}
-									initial={{ opacity: 0, y: -50 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: 50 }}
+									initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
+									animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
+									exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
 									key={newsletterFormState}
 								>
 									{renderButtonDynamicLayerContent(newsletterFormState)}
@@ -213,7 +213,6 @@ export const Newsletter: FC = () => {
 
 // TODO
 // Submitt  button must be separated
-// Create render fucnction of content button with ifs or switch doesent matter
 // Button must change width dynamically
 
 // TODO
