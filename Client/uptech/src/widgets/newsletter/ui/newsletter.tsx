@@ -128,7 +128,7 @@ export const Newsletter: FC = () => {
 	};
 
 	return (
-		<div className="tablet:mr-[40rem] desktop:mr-[unset]">
+		<div className="tablet:mr-[40rem] desktop:mr-[unset] tablet:basis-[477rem]">
 			<h2 className="text-[40rem] font-medium leading-[125%] text-white-50 mb-[24rem] opacity-[0.9]">
 				Stay Updated on Latest Product Releases
 			</h2>
@@ -136,7 +136,7 @@ export const Newsletter: FC = () => {
 				onSubmit={handleSubmit(handleNewsletterFormSubmit)}
 				className="flex flex-col gap-y-[8rem] mb-[40rem] tablet:flex-row tablet:gap-x-[8rem] tablet:mb-[unset]"
 			>
-				<div className="relative w-full tablet:basis-[320rem] tablet:shrink-0">
+				<div className="relative w-full tablet:basis-[320rem]">
 					<label className="visually-hidden" htmlFor="email">
 						Enter your email
 					</label>
