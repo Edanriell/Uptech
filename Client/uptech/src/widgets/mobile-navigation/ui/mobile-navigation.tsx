@@ -1,4 +1,4 @@
-import { type ComponentPropsWithoutRef, type FC, useRef } from "react";
+import { type ComponentPropsWithoutRef, type FC } from "react";
 import { motion, type MotionProps, type Variants } from "motion/react";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
@@ -12,9 +12,10 @@ import {
 	SecondaryNavigation,
 	SecondaryNavigationLink
 } from "@widgets/navigation/ui/secondary-navigation/ui";
-import { useHeaderStore } from "@widgets/header/model";
 
 import { Icon } from "@shared/ui/icon/ui";
+
+import { useMobileNavigation } from "../lib/hooks";
 
 import { MobileNavigationTrigger } from "./mobile-navigation-trigger";
 
@@ -146,11 +147,7 @@ const mobileNavigationAnimationVariants2: Variants = {
 };
 
 export const MobileNavigation: MobileNavigation = ({ className }) => {
-	const mobileNavigationState = useHeaderStore(
-		({ mobileNavigationState }) => mobileNavigationState
-	);
-
-	const mobileNavigationRef = useRef<HTMLDivElement | null>(null);
+	const { mobileNavigationState, mobileNavigationRef } = useMobileNavigation();
 
 	const mobileNavigationClasses = clsx(
 		"m-[16rem] flex flex-row gap-x-[16rem] w-fill-firefox w-fill-chrome",
