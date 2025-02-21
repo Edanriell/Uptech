@@ -24,15 +24,17 @@ export const with3D = <T extends object>(
 		rotationFactor = -40,
 		...rest
 	}: With3DProps & T) => {
-		const [rotateXaxis, setRotateXaxis] = useState<number>(0);
-		const [rotateYaxis, setRotateYaxis] = useState<number>(0);
-		const ref = useRef<HTMLDivElement>(null);
+		const [rotateXAxis, setRotateXAxis] = useState<number>(0);
+		const [rotateYAxis, setRotateYAxis] = useState<number>(0);
+
+		const ref = useRef<HTMLDivElement | null>(null);
 
 		const dx = useSpring(0, with3DTransition);
 		const dy = useSpring(0, with3DTransition);
 
 		const handleMouseMove = (event: MouseEvent<HTMLDivElement>): void => {
 			if (!ref.current) return;
+
 			const elementRect = ref.current.getBoundingClientRect();
 			const elementWidth = elementRect.width;
 			const elementHeight = elementRect.height;
@@ -45,19 +47,19 @@ export const with3D = <T extends object>(
 			const degreeX = (mouseX / elementWidth) * rotationFactor;
 			const degreeY = (mouseY / elementHeight) * rotationFactor;
 
-			setRotateXaxis(degreeX);
-			setRotateYaxis(degreeY);
+			setRotateXAxis(degreeX);
+			setRotateYAxis(degreeY);
 		};
 
-		const handleMouseEnd = (): void => {
-			setRotateXaxis(0);
-			setRotateYaxis(0);
+		const handleMouseLeave = (): void => {
+			setRotateXAxis(0);
+			setRotateYAxis(0);
 		};
 
 		useEffect(() => {
-			dx.set(-rotateXaxis);
-			dy.set(rotateYaxis);
-		}, [rotateXaxis, rotateYaxis, dx, dy]);
+			dx.set(-rotateXAxis);
+			dy.set(rotateYAxis);
+		}, [rotateXAxis, rotateYAxis, dx, dy]);
 
 		return (
 			<motion.div
@@ -73,7 +75,7 @@ export const with3D = <T extends object>(
 					ref={ref}
 					whileHover={{ scale }}
 					onMouseMove={handleMouseMove}
-					onMouseLeave={handleMouseEnd}
+					onMouseLeave={handleMouseLeave}
 					transition={with3DTransition}
 					style={{
 						width: "100%",
