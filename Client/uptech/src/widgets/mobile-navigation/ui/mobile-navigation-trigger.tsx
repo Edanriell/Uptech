@@ -69,7 +69,7 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 		className
 	);
 
-	const barStyles = {
+	const barsClasses = {
 		bar1: "absolute w-full h-[1.9rem] top-0 left-0 bg-white-50 rounded-full",
 		bar2: "absolute w-full h-[1.9rem] top-[50%] translate-y-[-70%] left-0 bg-white-50 rounded-full",
 		bar3: "absolute w-full h-[1.9rem] bottom-[0] translate-y-[-50%] left-0 bg-white-50 rounded-full"
@@ -84,7 +84,7 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 				opened: mobileNavigationTriggerBarAnimationVariants["opened"][variantKey],
 				closed: mobileNavigationTriggerBarAnimationVariants["closed"][variantKey]
 			}}
-			className={barStyles[variantKey]}
+			className={barsClasses[variantKey]}
 		/>
 	);
 

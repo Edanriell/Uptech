@@ -94,7 +94,7 @@ const mobileNavigationAnimationVariants: Variants = {
 		transition: {
 			delay: 0,
 			type: "spring",
-			bounce: 0,
+			bounce: 0.25,
 			duration: 0.45
 		}
 	},
@@ -127,7 +127,7 @@ const mobileNavigationAnimationVariants2: Variants = {
 		transition: {
 			delay: 0.25,
 			type: "spring",
-			bounce: 0,
+			bounce: 0.25,
 			duration: 0.45
 		}
 	},

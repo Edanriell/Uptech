@@ -56,7 +56,7 @@ export const DrawerInstance: FC<DrawerInstanceProps> = ({ id, index, reversedInd
 			whileHover={IS_DRAWER_FIRST_IN_STACK ? "" : "hover"}
 			exit={"exit"}
 			animate={IS_DRAWER_LAST_IN_STACK ? "last" : "default"}
-			transition={{ type: "spring", duration: 0.6, bounce: 0 }}
+			transition={{ type: "spring", duration: 0.75, bounce: 0.25 }}
 			className={interactiveDrawerClasses}
 			style={{
 				width: config.drawerWidth!,

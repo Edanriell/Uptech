@@ -104,8 +104,8 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 						<motion.span
 							transition={{
 								type: "spring",
-								duration: 1.5,
-								bounce: 0.35
+								duration: 1.35,
+								bounce: 0.25
 							}}
 							initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
 							animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
@@ -121,8 +121,8 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 						<motion.span
 							transition={{
 								type: "spring",
-								duration: 1.5,
-								bounce: 0.35
+								duration: 1.35,
+								bounce: 0.25
 							}}
 							initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
 							animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}

@@ -75,7 +75,7 @@ const stickyHeaderAnimationVariants: Variants = {
 		y: 0,
 		top: 0,
 		filter: "blur(0rem)",
-		transition: { type: "spring", duration: 0.5, bounce: 0 }
+		transition: { type: "spring", duration: 0.55, bounce: 0.25 }
 	},
 	hidden: {
 		visibility: "visible",

@@ -4,6 +4,7 @@ import { type FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AnimatePresence, motion } from "motion/react";
+
 import { useWindowSize } from "@shared/lib/hooks";
 
 import { newsletterFormSchema } from "../model";
