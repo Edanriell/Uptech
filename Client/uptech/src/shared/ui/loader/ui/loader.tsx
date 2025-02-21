@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC } from "react";
 
 import { useLoader } from "../lib/hooks";

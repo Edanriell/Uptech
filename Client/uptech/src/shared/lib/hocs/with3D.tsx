@@ -1,3 +1,5 @@
+"use client";
+
 import { type ComponentType, type MouseEvent, useEffect, useRef, useState } from "react";
 import { motion, type Spring, useSpring } from "motion/react";
 

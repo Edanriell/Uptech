@@ -1,14 +1,7 @@
-import {
-	Children,
-	type FC,
-	Fragment,
-	isValidElement,
-	type ReactElement,
-	useLayoutEffect
-} from "react";
+import { Children, type FC, Fragment, isValidElement, type ReactElement } from "react";
 
 import { DrawerProvider } from "../model";
-import { useDrawerStore } from "../lib/hooks";
+import { useDrawerConfig } from "../lib/hooks";
 
 import { DrawerRoot } from "./drawer-root";
 import { DrawerTrigger } from "./drawer-trigger";
@@ -20,7 +13,7 @@ type DrawerComponents = {
 	Content: typeof DrawerContent;
 };
 
-type DrawerProps = {
+export type DrawerProps = {
 	max?: number;
 	width?: string;
 	height?: string;
@@ -30,6 +23,18 @@ type DrawerProps = {
 
 type Drawer = FC<DrawerProps> & DrawerComponents;
 
+const validateDrawerChildren = (children: ReactElement) => {
+	Children.forEach(children, (child) => {
+		if (!(isValidElement(child) && child.type === DrawerContent)) {
+			throw new Error(
+				`<Drawer> children must be a valid <Drawer.Content> component. ` +
+					`Invalid child detected: ${child.type}. ` +
+					`Ensure all children are instances of <Drawer.Content>.`
+			);
+		}
+	});
+};
+
 export const Drawer: Drawer = ({
 	max = 3,
 	width = "380rem",
@@ -37,26 +42,9 @@ export const Drawer: Drawer = ({
 	position = "right",
 	children
 }) => {
-	const { setConfig } = useDrawerStore();
+	useDrawerConfig({ max, width, height, position });
 
-	useLayoutEffect(() => {
-		setConfig({
-			maxDrawers: max,
-			drawerWidth: width,
-			drawerHeight: height,
-			drawerPosition: position
-		});
-	}, [max, width, height, position]);
-
-	Children.forEach(children, (child) => {
-		if (!(isValidElement(child) && child.type === DrawerContent)) {
-			throw new Error(
-				`<Drawer> children must be a valid <Drawer.Content> component. ` +
-					`Invalid child component detected: ${child.type}. ` +
-					`Ensure that all children passed to <Drawer> are instances of <Drawer.Content>.`
-			);
-		}
-	});
+	validateDrawerChildren(children);
 
 	return (
 		<Fragment>
