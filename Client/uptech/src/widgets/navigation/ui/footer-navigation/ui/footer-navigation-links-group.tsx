@@ -1,14 +1,14 @@
 import { type FC, isValidElement, type ReactElement } from "react";
 
-import { NavigationLinksList } from "./navigation-links-list";
+import { FooterNavigationLinksList } from "./footer-navigation-links-list";
 
 type NavigationLinksGroupProps = {
 	name: string;
 	children: ReactElement;
 };
 
-export const NavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name, children }) => {
-	if (!(isValidElement(children) && children.type === NavigationLinksList)) {
+export const FooterNavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name, children }) => {
+	if (!(isValidElement(children) && children.type === FooterNavigationLinksList)) {
 		throw new Error(
 			`<NavigationLinksGroup> expects exactly one child of type <NavigationLinksList>. ` +
 				`You might have passed an invalid child, no child, or multiple children. ` +

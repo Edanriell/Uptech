@@ -1,5 +1,4 @@
-import React, { type FC } from "react";
-import { motion, type Variants } from "motion/react";
+import { type FC } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
 
@@ -10,26 +9,23 @@ import {
 } from "@widgets/navigation/ui/primary-navigation/ui";
 import {
 	SecondaryNavigation,
-	type SecondaryNavigationLink
+	SecondaryNavigationLink
 } from "@widgets/navigation/ui/secondary-navigation/ui";
-import { MobileNavigation } from "@widgets/mobile-navigation/ui";
 
 import { Logotype } from "@shared/ui/logotype/ui";
 import { Icon } from "@shared/ui/icon/ui";
 
-import { useStickyHeader } from "../lib/hooks";
-
-type StickyHeaderPrimaryNavigationLinkNames =
+type StaticHeaderPrimaryNavigationLinkNames =
 	| "home"
 	| "catalogue"
 	| "collections"
 	| "popular"
 	| "contacts";
 
-type StickyHeaderSecondaryNavigationLinkNames = "search" | "profile" | "cart";
+type StaticHeaderSecondaryNavigationLinkNames = "search" | "profile" | "cart";
 
-const stickyHeaderPrimaryNavigationLinks = new Map<
-	StickyHeaderPrimaryNavigationLinkNames,
+const staticHeaderPrimaryNavigationLinks = new Map<
+	StaticHeaderPrimaryNavigationLinkNames,
 	PrimaryNavigationLink
 >([
 	["home", { id: uuidv4(), name: "Home", href: "#" }],
@@ -39,8 +35,8 @@ const stickyHeaderPrimaryNavigationLinks = new Map<
 	["contacts", { id: uuidv4(), name: "Contacts", href: "#" }]
 ]);
 
-const stickyHeaderSecondaryNavigationLinks = new Map<
-	StickyHeaderSecondaryNavigationLinkNames,
+const staticHeaderSecondaryNavigationLinks = new Map<
+	StaticHeaderSecondaryNavigationLinkNames,
 	SecondaryNavigationLink
 >([
 	[
@@ -69,46 +65,15 @@ const stickyHeaderSecondaryNavigationLinks = new Map<
 	]
 ]);
 
-const stickyHeaderAnimationVariants: Variants = {
-	visible: {
-		opacity: 1,
-		y: 0,
-		top: 0,
-		filter: "blur(0rem)",
-		transition: { type: "spring", duration: 0.55, bounce: 0.25 }
-	},
-	hidden: {
-		visibility: "visible",
-		opacity: 0,
-		y: 0,
-		top: -80,
-		filter: "blur(5rem)",
-		transition: { type: "spring", duration: 0.45, bounce: 0 }
-	}
-};
-
-export const StickyHeader: FC = () => {
-	const { animationControls } = useStickyHeader();
-
-	// TODO
-	// When Home page will be complete play with paddings
-	// See what fits best
-	// tablet:pl-[32rem] tablet:pr-[32rem] tablet:pt-[24rem] tablet:pb-[24rem] tablet:ml-[24rem] tablet:mr-[24rem] tablet:mt-[24rem] tablet:mb-[24rem]
-
+export const HeaderStatic: FC = () => {
 	return (
-		<motion.header
-			animate={animationControls}
-			variants={stickyHeaderAnimationVariants}
-			className="shadow-soft pt-[18rem] pr-[24rem] pb-[18rem] pl-[16rem] flex flex-row items-center rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] m-[16rem] fixed top-0 left-0 w-fill-chrome w-fill-firefox max-h-[64rem] justify-between tablet:max-h-[80rem] tablet:invisible z-[30]"
-			role="banner"
-			aria-label="Sticky header"
-		>
+		<header className="pl-[32rem] pr-[32rem] mt-[24rem] mb-[24rem] flex-row items-center justify-between max-h-[80rem] hidden tablet:flex relative z-[20]">
 			<Link href="/">
-				<Logotype size="small" color="light" />
+				<Logotype size="medium" color="dark" />
 			</Link>
 			<PrimaryNavigation orientation="horizontal">
 				<PrimaryNavigation.NavigationLinksList>
-					{Array.from(stickyHeaderPrimaryNavigationLinks.values()).map(
+					{Array.from(staticHeaderPrimaryNavigationLinks.values()).map(
 						({ id, name, href }) => (
 							<PrimaryNavigation.NavigationLink
 								key={id}
@@ -123,7 +88,7 @@ export const StickyHeader: FC = () => {
 			<Drawer.Trigger>
 				<SecondaryNavigation className="hidden tablet:flex" orientation="horizontal">
 					<SecondaryNavigation.NavigationLinksList>
-						{Array.from(stickyHeaderSecondaryNavigationLinks.values()).map(
+						{Array.from(staticHeaderSecondaryNavigationLinks.values()).map(
 							({ name, Icon, contentId }, index) => (
 								<SecondaryNavigation.NavigationLink
 									key={index}
@@ -136,7 +101,6 @@ export const StickyHeader: FC = () => {
 					</SecondaryNavigation.NavigationLinksList>
 				</SecondaryNavigation>
 			</Drawer.Trigger>
-			<MobileNavigation.Trigger className="absolute right-[24rem] top-[50%] translate-y-[-50%] tablet:right-[32rem]" />
-		</motion.header>
+		</header>
 	);
 };

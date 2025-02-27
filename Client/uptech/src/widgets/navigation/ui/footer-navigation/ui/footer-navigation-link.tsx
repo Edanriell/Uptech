@@ -9,7 +9,7 @@ type NavigationLinkProps = {
 	children: ReactNode;
 };
 
-export const NavigationLink: FC<NavigationLinkProps> = ({ href, children }) => {
+export const FooterNavigationLink: FC<NavigationLinkProps> = ({ href, children }) => {
 	return (
 		<MotionConfig transition={{ duration: 0.25, type: "spring", bounce: 0 }}>
 			<motion.li
