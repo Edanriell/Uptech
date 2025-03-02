@@ -1,19 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Canvas, extend, useFrame } from "@react-three/fiber";
+import { Canvas, extend } from "@react-three/fiber";
 import { PerspectiveCamera, Plane, shaderMaterial } from "@react-three/drei";
 import * as THREE from "three";
+import { useGesture } from "@use-gesture/react";
 
+// Update the SliderMaterial shader with these enhanced effects
 const SliderMaterial = shaderMaterial(
 	{
-		effectFactor: 0.8,
+		effectFactor: 1.2,
 		dispFactor: 0,
-		direction: 1, // New uniform for direction: 1 for right, -1 for left
+		direction: 1,
 		tex: undefined,
-		tex2: undefined
+		tex2: undefined,
+		smoothness: 0.4,
+		chromaOffset: 0.02
 	},
-	// Vertex shader
+
+	// Vertex shader remains the same
 	`
     varying vec2 vUv;
     void main() {
@@ -21,7 +26,8 @@ const SliderMaterial = shaderMaterial(
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
   `,
-	// Fragment shader
+
+	// Clean fragment shader without grain
 	`
     varying vec2 vUv;
     uniform sampler2D tex;
@@ -29,21 +35,44 @@ const SliderMaterial = shaderMaterial(
     uniform float dispFactor;
     uniform float effectFactor;
     uniform float direction;
+    uniform float smoothness;
+    uniform float chromaOffset;
+
+    vec4 sampleWithChroma(sampler2D tex, vec2 uv, float offset) {
+        vec4 r = texture2D(tex, uv + vec2(offset, 0.0));
+        vec4 g = texture2D(tex, uv);
+        vec4 b = texture2D(tex, uv - vec2(offset, 0.0));
+        return vec4(r.r, g.g, b.b, g.a);
+    }
 
     void main() {
-      vec2 uv = vUv;
-      
-      vec4 disp = texture2D(tex2, uv);
-      vec2 distortedPosition = vec2(uv.x + direction * dispFactor * (disp.r*effectFactor), uv.y);
-      vec2 distortedPosition2 = vec2(uv.x - direction * (1.0 - dispFactor) * (disp.r*effectFactor), uv.y);
-      
-      vec4 _texture1 = texture2D(tex, distortedPosition);
-      vec4 _texture2 = texture2D(tex2, distortedPosition2);
-      
-      vec4 finalTexture = mix(_texture1, _texture2, dispFactor);
-      
-      gl_FragColor = finalTexture;
+        vec2 uv = vUv;
+        
+        // Smooth transition factor
+        float smoothFactor = smoothstep(0.0, smoothness, dispFactor) * 
+                           (1.0 - smoothstep(1.0 - smoothness, 1.0, dispFactor));
+        
+        // Clean displacement without waves
+        vec2 distortedPosition = vec2(uv.x + direction * dispFactor * effectFactor, uv.y);
+        vec2 distortedPosition2 = vec2(uv.x - direction * (1.0 - dispFactor) * effectFactor, uv.y);
+        
+        // Apply chromatic aberration only during transition
+        vec4 currentFrame = sampleWithChroma(tex, distortedPosition, chromaOffset * smoothFactor);
+        vec4 nextFrame = sampleWithChroma(tex2, distortedPosition2, chromaOffset * smoothFactor);
+        
+        vec4 finalTexture = mix(currentFrame, nextFrame, dispFactor);
+
+        // Subtle vignette
+        float vignette = 1.0 - smoothstep(0.5, 1.5, length(uv - 0.5) * 1.2);
+        
+        vec3 color = finalTexture.rgb * vignette;
+        
+        // Add subtle brightness boost during transition
+        color *= 1.0 + smoothFactor * 0.1;
+        
+        gl_FragColor = vec4(color, finalTexture.a);
     }
+
   `
 );
 
@@ -71,7 +100,7 @@ const ImagePlane = () => {
 
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [nextIndex, setNextIndex] = useState(1);
-	const [transitionDirection, setTransitionDirection] = useState(1); // 1 for right, -1 for left
+	const [transitionDirection, setTransitionDirection] = useState(1);
 	const materialRef = useRef<any>();
 	const timeout = useRef<NodeJS.Timeout>();
 	const isTransitioning = useRef(false);
@@ -91,8 +120,6 @@ const ImagePlane = () => {
 
 		isTransitioning.current = true;
 		transitionProgress.current = 0;
-
-		// Set the visual direction of the transition
 		setTransitionDirection(direction === "next" ? 1 : -1);
 
 		const nextIdx =
@@ -125,9 +152,7 @@ const ImagePlane = () => {
 	};
 
 	useEffect(() => {
-		window.__imageSliderNavigate = (direction) => {
-			navigateToImage(direction);
-		};
+		window.__imageSliderNavigate = navigateToImage;
 
 		timeout.current = setInterval(() => {
 			startTransition("next");
@@ -139,22 +164,6 @@ const ImagePlane = () => {
 		};
 	}, [currentIndex]);
 
-	useFrame((_, delta) => {
-		if (materialRef.current && isTransitioning.current) {
-			const ease = (t: number) => t * t * (3 - 2 * t);
-
-			transitionProgress.current = Math.min(transitionProgress.current + delta * 0.5, 1);
-
-			materialRef.current.dispFactor = ease(transitionProgress.current);
-
-			if (transitionProgress.current >= 1) {
-				isTransitioning.current = false;
-				transitionProgress.current = 0;
-				setCurrentIndex(nextIndex);
-			}
-		}
-	});
-
 	return (
 		<Plane args={[16, 9]} position={[0, 0, 0]}>
 			<sliderMaterial
@@ -163,16 +172,29 @@ const ImagePlane = () => {
 				tex2={textures.current[nextIndex]}
 				transparent
 				dispFactor={0}
-				effectFactor={0.8}
+				effectFactor={1.2}
 				direction={transitionDirection}
+				smoothness={0.4}
+				chromaOffset={0.02}
 			/>
 		</Plane>
 	);
 };
 
 export const ImageSlider = () => {
+	const bind = useGesture({
+		onDrag: ({ movement: [mx], down, direction: [xDir], velocity }) => {
+			if (window.__imageSliderNavigate && !down && (Math.abs(mx) > 100 || velocity > 0.3)) {
+				window.__imageSliderNavigate(xDir > 0 ? "prev" : "next");
+			}
+		}
+	});
+
 	return (
-		<div className="relative w-full h-screen bg-black">
+		<div
+			className="relative w-full h-screen bg-black cursor-grab active:cursor-grabbing"
+			{...bind()}
+		>
 			<Canvas>
 				<PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
 				<ambientLight intensity={0.5} />
