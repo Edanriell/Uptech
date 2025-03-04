@@ -1,24 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Canvas, extend } from "@react-three/fiber";
+import { Canvas, extend, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, Plane, shaderMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useGesture } from "@use-gesture/react";
 
-// Update the SliderMaterial shader with these enhanced effects
 const SliderMaterial = shaderMaterial(
 	{
-		effectFactor: 1.2,
+		effectFactor: 0.8,
 		dispFactor: 0,
 		direction: 1,
 		tex: undefined,
 		tex2: undefined,
-		smoothness: 0.4,
-		chromaOffset: 0.02
+		smoothness: 0.6,
+		chromaOffset: 0.015
 	},
 
-	// Vertex shader remains the same
+	// Vertex shader
 	`
     varying vec2 vUv;
     void main() {
@@ -27,7 +26,7 @@ const SliderMaterial = shaderMaterial(
     }
   `,
 
-	// Clean fragment shader without grain
+	// Fragment shader
 	`
     varying vec2 vUv;
     uniform sampler2D tex;
@@ -48,31 +47,25 @@ const SliderMaterial = shaderMaterial(
     void main() {
         vec2 uv = vUv;
         
-        // Smooth transition factor
         float smoothFactor = smoothstep(0.0, smoothness, dispFactor) * 
                            (1.0 - smoothstep(1.0 - smoothness, 1.0, dispFactor));
         
-        // Clean displacement without waves
         vec2 distortedPosition = vec2(uv.x + direction * dispFactor * effectFactor, uv.y);
         vec2 distortedPosition2 = vec2(uv.x - direction * (1.0 - dispFactor) * effectFactor, uv.y);
         
-        // Apply chromatic aberration only during transition
         vec4 currentFrame = sampleWithChroma(tex, distortedPosition, chromaOffset * smoothFactor);
         vec4 nextFrame = sampleWithChroma(tex2, distortedPosition2, chromaOffset * smoothFactor);
         
         vec4 finalTexture = mix(currentFrame, nextFrame, dispFactor);
 
-        // Subtle vignette
         float vignette = 1.0 - smoothstep(0.5, 1.5, length(uv - 0.5) * 1.2);
         
         vec3 color = finalTexture.rgb * vignette;
         
-        // Add subtle brightness boost during transition
         color *= 1.0 + smoothFactor * 0.1;
         
         gl_FragColor = vec4(color, finalTexture.a);
     }
-
   `
 );
 
@@ -105,6 +98,7 @@ const ImagePlane = () => {
 	const timeout = useRef<NodeJS.Timeout>();
 	const isTransitioning = useRef(false);
 	const transitionProgress = useRef(0);
+	const animationSpeed = useRef(0.008);
 
 	const textures = useRef(
 		images.map((url) => {
@@ -114,6 +108,24 @@ const ImagePlane = () => {
 			return texture;
 		})
 	);
+
+	const easeInOutCubic = (t: number): number => {
+		return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+	};
+
+	useFrame(() => {
+		if (isTransitioning.current && materialRef.current) {
+			transitionProgress.current += animationSpeed.current;
+			const easedProgress = easeInOutCubic(transitionProgress.current);
+			materialRef.current.dispFactor = easedProgress;
+
+			if (transitionProgress.current >= 1) {
+				isTransitioning.current = false;
+				transitionProgress.current = 0;
+				setCurrentIndex(nextIndex);
+			}
+		}
+	});
 
 	const startTransition = (direction: "prev" | "next") => {
 		if (isTransitioning.current) return;
@@ -148,7 +160,7 @@ const ImagePlane = () => {
 
 		timeout.current = setInterval(() => {
 			startTransition("next");
-		}, 3000);
+		}, 5000);
 	};
 
 	useEffect(() => {
@@ -156,7 +168,7 @@ const ImagePlane = () => {
 
 		timeout.current = setInterval(() => {
 			startTransition("next");
-		}, 3000);
+		}, 5000);
 
 		return () => {
 			if (timeout.current) clearInterval(timeout.current);
@@ -172,10 +184,10 @@ const ImagePlane = () => {
 				tex2={textures.current[nextIndex]}
 				transparent
 				dispFactor={0}
-				effectFactor={1.2}
+				effectFactor={0.8}
 				direction={transitionDirection}
-				smoothness={0.4}
-				chromaOffset={0.02}
+				smoothness={0.6}
+				chromaOffset={0.015}
 			/>
 		</Plane>
 	);
@@ -184,7 +196,7 @@ const ImagePlane = () => {
 export const ImageSlider = () => {
 	const bind = useGesture({
 		onDrag: ({ movement: [mx], down, direction: [xDir], velocity }) => {
-			if (window.__imageSliderNavigate && !down && (Math.abs(mx) > 100 || velocity > 0.3)) {
+			if (window.__imageSliderNavigate && !down && (Math.abs(mx) > 50 || velocity > 0.2)) {
 				window.__imageSliderNavigate(xDir > 0 ? "prev" : "next");
 			}
 		}
