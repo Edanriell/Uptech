@@ -186,8 +186,8 @@ const ImagePlane = () => {
 				dispFactor={0}
 				effectFactor={0.8}
 				direction={transitionDirection}
-				smoothness={0.6}
-				chromaOffset={0.015}
+				smoothness={1}
+				chromaOffset={0.2}
 			/>
 		</Plane>
 	);
