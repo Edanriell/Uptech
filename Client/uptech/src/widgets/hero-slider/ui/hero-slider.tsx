@@ -1,23 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, Plane, shaderMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useGesture } from "@use-gesture/react";
 
+// Create a custom shader material with swapped condition.
 const SliderMaterial = shaderMaterial(
 	{
 		effectFactor: 0.8,
 		dispFactor: 0,
+		// When direction > 0, the effect comes from the right,
+		// when direction < 0, the effect comes from the left.
 		direction: 1,
 		tex: undefined,
 		tex2: undefined,
-		smoothness: 0.6,
-		chromaOffset: 0.015
+		smoothness: 0.6
 	},
-
-	// Vertex shader
+	// Vertex shader remains the same.
 	`
     varying vec2 vUv;
     void main() {
@@ -25,8 +26,7 @@ const SliderMaterial = shaderMaterial(
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
   `,
-
-	// Fragment shader
+	// Updated Fragment shader: note the swapped condition for u.
 	`
     varying vec2 vUv;
     uniform sampler2D tex;
@@ -35,36 +35,18 @@ const SliderMaterial = shaderMaterial(
     uniform float effectFactor;
     uniform float direction;
     uniform float smoothness;
-    uniform float chromaOffset;
-
-    vec4 sampleWithChroma(sampler2D tex, vec2 uv, float offset) {
-        vec4 r = texture2D(tex, uv + vec2(offset, 0.0));
-        vec4 g = texture2D(tex, uv);
-        vec4 b = texture2D(tex, uv - vec2(offset, 0.0));
-        return vec4(r.r, g.g, b.b, g.a);
-    }
 
     void main() {
-        vec2 uv = vUv;
-        
-        float smoothFactor = smoothstep(0.0, smoothness, dispFactor) * 
-                           (1.0 - smoothstep(1.0 - smoothness, 1.0, dispFactor));
-        
-        vec2 distortedPosition = vec2(uv.x + direction * dispFactor * effectFactor, uv.y);
-        vec2 distortedPosition2 = vec2(uv.x - direction * (1.0 - dispFactor) * effectFactor, uv.y);
-        
-        vec4 currentFrame = sampleWithChroma(tex, distortedPosition, chromaOffset * smoothFactor);
-        vec4 nextFrame = sampleWithChroma(tex2, distortedPosition2, chromaOffset * smoothFactor);
-        
-        vec4 finalTexture = mix(currentFrame, nextFrame, dispFactor);
-
-        float vignette = 1.0 - smoothstep(0.5, 1.5, length(uv - 0.5) * 1.2);
-        
-        vec3 color = finalTexture.rgb * vignette;
-        
-        color *= 1.0 + smoothFactor * 0.1;
-        
-        gl_FragColor = vec4(color, finalTexture.a);
+      vec2 uv = vUv;
+      // When direction > 0, use (1.0 - uv.x) so that the transition starts at the right edge.
+      // When direction < 0, use uv.x so that it starts at the left.
+      float u = direction > 0.0 ? (1.0 - uv.x) : uv.x;
+      float mask = smoothstep(0.0, smoothness, u + (dispFactor * 2.0 - 1.0));
+      vec4 currentFrame = texture2D(tex, uv);
+      vec4 nextFrame = texture2D(tex2, uv);
+      vec4 finalTexture = mix(currentFrame, nextFrame, mask);
+      float transitionBoost = 1.0 + (0.1 * (1.0 - abs(2.0 * dispFactor - 1.0)));
+      gl_FragColor = vec4(finalTexture.rgb * transitionBoost, finalTexture.a);
     }
   `
 );
@@ -85,20 +67,35 @@ declare global {
 	}
 }
 
-const ImagePlane = () => {
+// Expose a drag handler type from ImagePlane.
+interface ImagePlaneHandle {
+	handleDrag: (down: boolean, mx: number, xDir: number) => void;
+}
+
+const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 	const images = [
-		"https://images.unsplash.com/photo-1740398864002-99d4347d5190?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-		"https://images.unsplash.com/photo-1740487092927-d6e9d14373cb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		"https://images.unsplash.com/photo-1740398864002-99d4347d5190?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3",
+		"https://images.unsplash.com/photo-1740487092927-d6e9d14373cb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3"
 	];
 
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [nextIndex, setNextIndex] = useState(1);
+	// transitionDirection now controls the shader:
+	// Positive means reveal from right, negative means reveal from left.
 	const [transitionDirection, setTransitionDirection] = useState(1);
 	const materialRef = useRef<any>();
 	const timeout = useRef<NodeJS.Timeout>();
 	const isTransitioning = useRef(false);
 	const transitionProgress = useRef(0);
-	const animationSpeed = useRef(0.008);
+	const animationSpeed = useRef(0.005);
+
+	// Refs for drag progress.
+	const isDragging = useRef(false);
+	const dragProgress = useRef(0);
+	const targetProgress = useRef<number | null>(null);
+	const DRAG_THRESHOLD = 200; // Maximum pixels for full progress.
+	const COMPLETE_THRESHOLD = 0.3; // Minimum progress to complete transition.
+	const dragAnimationSpeed = 0.05; // Speed for finishing the drag animation.
 
 	const textures = useRef(
 		images.map((url) => {
@@ -109,38 +106,23 @@ const ImagePlane = () => {
 		})
 	);
 
-	const easeInOutCubic = (t: number): number => {
-		return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+	// Easing function for auto-transitions.
+	const easeInOutSine = (t: number): number => {
+		return -(Math.cos(Math.PI * t) - 1) / 2;
 	};
 
-	useFrame(() => {
-		if (isTransitioning.current && materialRef.current) {
-			transitionProgress.current += animationSpeed.current;
-			const easedProgress = easeInOutCubic(transitionProgress.current);
-			materialRef.current.dispFactor = easedProgress;
-
-			if (transitionProgress.current >= 1) {
-				isTransitioning.current = false;
-				transitionProgress.current = 0;
-				setCurrentIndex(nextIndex);
-			}
-		}
-	});
-
+	// Auto-transition for non-drag interactions.
 	const startTransition = (direction: "prev" | "next") => {
-		if (isTransitioning.current) return;
-
+		if (isTransitioning.current || isDragging.current) return;
 		isTransitioning.current = true;
 		transitionProgress.current = 0;
+		// For auto-transition, assume "next" means swipe right-to-left.
 		setTransitionDirection(direction === "next" ? 1 : -1);
-
 		const nextIdx =
 			direction === "next"
 				? (currentIndex + 1) % images.length
 				: (currentIndex - 1 + images.length) % images.length;
-
 		setNextIndex(nextIdx);
-
 		if (materialRef.current) {
 			materialRef.current.tex = textures.current[currentIndex];
 			materialRef.current.tex2 = textures.current[nextIdx];
@@ -149,22 +131,89 @@ const ImagePlane = () => {
 		}
 	};
 
-	const navigateToImage = (direction: "prev" | "next") => {
-		if (isTransitioning.current) return;
-
-		if (timeout.current) {
-			clearInterval(timeout.current);
+	useFrame(() => {
+		if (materialRef.current) {
+			// If finishing a drag, animate toward the target progress.
+			if (targetProgress.current !== null) {
+				const currentVal = materialRef.current.dispFactor;
+				const target = targetProgress.current;
+				const newVal = currentVal + (target - currentVal) * dragAnimationSpeed;
+				materialRef.current.dispFactor = newVal;
+				if (Math.abs(newVal - target) < 0.01) {
+					materialRef.current.dispFactor = target;
+					if (target === 1) {
+						setCurrentIndex(nextIndex);
+					}
+					targetProgress.current = null;
+					dragProgress.current = 0;
+					// Restart auto-transition timer.
+					if (timeout.current) clearInterval(timeout.current);
+					timeout.current = setInterval(() => {
+						startTransition("next");
+					}, 5000);
+				}
+			}
+			// Auto-transition animation when not dragging.
+			else if (isTransitioning.current && !isDragging.current) {
+				transitionProgress.current += animationSpeed.current;
+				const easedProgress = easeInOutSine(transitionProgress.current);
+				materialRef.current.dispFactor = easedProgress;
+				if (transitionProgress.current >= 1) {
+					isTransitioning.current = false;
+					transitionProgress.current = 0;
+					setCurrentIndex(nextIndex);
+				}
+			}
 		}
+	});
 
-		startTransition(direction);
-
-		timeout.current = setInterval(() => {
-			startTransition("next");
-		}, 5000);
-	};
+	// Expose a handleDrag method.
+	useImperativeHandle(ref, () => ({
+		handleDrag: (down: boolean, mx: number, _xDir: number) => {
+			if (!materialRef.current) return;
+			if (down) {
+				if (!isDragging.current) {
+					isDragging.current = true;
+					if (timeout.current) clearInterval(timeout.current);
+					let dir, nextIdx;
+					// Use the sign of mx:
+					// Dragging right (mx > 0): show previous slide coming from left.
+					// Dragging left (mx < 0): show next slide coming from right.
+					if (mx > 0) {
+						dir = -1;
+						nextIdx = (currentIndex - 1 + images.length) % images.length;
+					} else {
+						dir = 1;
+						nextIdx = (currentIndex + 1) % images.length;
+					}
+					setTransitionDirection(dir);
+					setNextIndex(nextIdx);
+					materialRef.current.tex = textures.current[currentIndex];
+					materialRef.current.tex2 = textures.current[nextIdx];
+					materialRef.current.direction = dir;
+				}
+				const progress = Math.min(Math.abs(mx) / DRAG_THRESHOLD, 1);
+				dragProgress.current = progress;
+				console.log(progress);
+				// PROBLEM HERE !
+				materialRef.current.dispFactor = progress;
+			} else {
+				if (isDragging.current) {
+					isDragging.current = false;
+					const completeTransition = dragProgress.current >= COMPLETE_THRESHOLD;
+					targetProgress.current = completeTransition ? 1 : 0;
+				}
+			}
+		}
+	}));
 
 	useEffect(() => {
-		window.__imageSliderNavigate = navigateToImage;
+		// Set up auto-transition and navigation.
+		window.__imageSliderNavigate = (direction: "prev" | "next") => {
+			if (!isDragging.current && !isTransitioning.current) {
+				startTransition(direction);
+			}
+		};
 
 		timeout.current = setInterval(() => {
 			startTransition("next");
@@ -186,18 +235,19 @@ const ImagePlane = () => {
 				dispFactor={0}
 				effectFactor={0.8}
 				direction={transitionDirection}
-				smoothness={1}
-				chromaOffset={0.2}
+				smoothness={0.8}
 			/>
 		</Plane>
 	);
-};
+});
 
 export const ImageSlider = () => {
+	const planeRef = useRef<ImagePlaneHandle>(null);
+
 	const bind = useGesture({
-		onDrag: ({ movement: [mx], down, direction: [xDir], velocity }) => {
-			if (window.__imageSliderNavigate && !down && (Math.abs(mx) > 50 || velocity > 0.2)) {
-				window.__imageSliderNavigate(xDir > 0 ? "prev" : "next");
+		onDrag: ({ movement: [mx], down, direction: [xDir] }) => {
+			if (planeRef.current) {
+				planeRef.current.handleDrag(down, mx, xDir);
 			}
 		}
 	});
@@ -211,7 +261,7 @@ export const ImageSlider = () => {
 				<PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
 				<ambientLight intensity={0.5} />
 				<directionalLight position={[10, 10, 10]} />
-				<ImagePlane />
+				<ImagePlane ref={planeRef} />
 			</Canvas>
 
 			<button

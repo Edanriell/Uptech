@@ -11,12 +11,12 @@
 	"dependencies": {
 		"@babel/core": "^7.26.9",
 		"@hookform/resolvers": "^3.10.0",
-		"@react-three/drei": "^10.0.3",
+		"@react-three/drei": "^10.0.4",
 		"@react-three/fiber": "^9.0.4",
 		"@use-gesture/react": "^10.3.1",
 		"babel-plugin-glsl": "^1.0.0",
 		"clsx": "^2.1.1",
-		"framer-motion-3d": "^12.4.7",
+		"framer-motion-3d": "^12.4.10",
 		"motion": "12.0.0",
 		"next": "15.2.0",
 		"react": "19.0.0",
@@ -31,14 +31,14 @@
 		"zustand": "^5.0.3"
 	},
 	"devDependencies": {
-		"@types/node": "^20.17.22",
+		"@types/node": "^20.17.23",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",
 		"@types/three": "^0.173.0",
 		"eslint": "^8.57.1",
 		"eslint-config-next": "15.1.0",
 		"postcss": "^8.5.3",
-		"prettier": "^3.5.2",
+		"prettier": "^3.5.3",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.8.2"
 	},
