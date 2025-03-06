@@ -88,6 +88,7 @@ const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 	const isTransitioning = useRef(false);
 	const transitionProgress = useRef(0);
 	const animationSpeed = useRef(0.005);
+	const currentMx = useRef(0);
 
 	// Refs for drag progress.
 	const isDragging = useRef(false);
@@ -113,7 +114,9 @@ const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 
 	// Auto-transition for non-drag interactions.
 	const startTransition = (direction: "prev" | "next") => {
+		console.log("START TRANSITION IS TRIGGERED");
 		if (isTransitioning.current || isDragging.current) return;
+		console.log("startTransition");
 		isTransitioning.current = true;
 		transitionProgress.current = 0;
 		// For auto-transition, assume "next" means swipe right-to-left.
@@ -131,10 +134,12 @@ const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 		}
 	};
 
+	// In this hook problem lies
 	useFrame(() => {
 		if (materialRef.current) {
 			// If finishing a drag, animate toward the target progress.
 			if (targetProgress.current !== null) {
+				console.log("Trigger frame1");
 				const currentVal = materialRef.current.dispFactor;
 				const target = targetProgress.current;
 				const newVal = currentVal + (target - currentVal) * dragAnimationSpeed;
@@ -155,6 +160,7 @@ const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 			}
 			// Auto-transition animation when not dragging.
 			else if (isTransitioning.current && !isDragging.current) {
+				console.log("Trigger frame2");
 				transitionProgress.current += animationSpeed.current;
 				const easedProgress = easeInOutSine(transitionProgress.current);
 				materialRef.current.dispFactor = easedProgress;
@@ -167,41 +173,87 @@ const ImagePlane = forwardRef<ImagePlaneHandle>((_props, ref) => {
 		}
 	});
 
+	useEffect(() => {
+		console.log("current TRANSITION DIRECTOPN" + " " + transitionDirection);
+	}, [transitionDirection]);
+
 	// Expose a handleDrag method.
 	useImperativeHandle(ref, () => ({
 		handleDrag: (down: boolean, mx: number, _xDir: number) => {
 			if (!materialRef.current) return;
+			currentMx.current = mx;
 			if (down) {
-				if (!isDragging.current) {
+				// console.log("CURRENT MX" + " " + mx);
+
+				// console.log("CURRENT MX" + " " + currentMx.current);
+				if (!isDragging.current && mx > 0) {
+					// console.log("LEFT");
+					// console.log("CURRENT MX" + " " + currentMx.current);
 					isDragging.current = true;
 					if (timeout.current) clearInterval(timeout.current);
-					let dir, nextIdx;
+					// let dir, nextIdx;
 					// Use the sign of mx:
 					// Dragging right (mx > 0): show previous slide coming from left.
 					// Dragging left (mx < 0): show next slide coming from right.
-					if (mx > 0) {
-						dir = -1;
-						nextIdx = (currentIndex - 1 + images.length) % images.length;
-					} else {
-						dir = 1;
-						nextIdx = (currentIndex + 1) % images.length;
-					}
-					setTransitionDirection(dir);
-					setNextIndex(nextIdx);
+					const nextIdx = (currentIndex - 1 + images.length) % images.length;
 					materialRef.current.tex = textures.current[currentIndex];
 					materialRef.current.tex2 = textures.current[nextIdx];
-					materialRef.current.direction = dir;
+					// if (currentMx.current > 0) {
+					// 	// dir = -1;
+					// 	// console.log("RIGHT TO LEFT");
+					//
+					// } else {
+					// 	// dir = 1;
+					// 	// console.log("LEFT TO RIGHT");
+					//
+					// }
+					// console.log(transitionDirection + "transitionDirection");
+					setTransitionDirection(1);
+					// console.log(transitionDirection + "transitionDirection");
+					setNextIndex(nextIdx);
+
+					materialRef.current.direction = transitionDirection;
+				} else if (!isDragging.current && mx < 0) {
+					isDragging.current = true;
+					if (timeout.current) clearInterval(timeout.current);
+					// let dir, nextIdx;
+
+					const nextIdx = (currentIndex + 1) % images.length;
+					materialRef.current.tex = textures.current[currentIndex];
+					materialRef.current.tex2 = textures.current[nextIdx];
+
+					setTransitionDirection(-1);
+					setNextIndex(nextIdx);
+
+					materialRef.current.direction = transitionDirection;
 				}
 				const progress = Math.min(Math.abs(mx) / DRAG_THRESHOLD, 1);
 				dragProgress.current = progress;
-				console.log(progress);
-				// PROBLEM HERE !
+				// console.log(1 - progress);
 				materialRef.current.dispFactor = progress;
+				// if (mx > 0) {
+				// 	materialRef.current.dispFactor = progress;
+				// } else {
+				// 	materialRef.current.dispFactor = 1 - progress;
+				// }
+				// console.log(materialRef.current.dispFactor);
 			} else {
+				// console.log(isDragging.current);
+				// console.log(mx);
 				if (isDragging.current) {
 					isDragging.current = false;
 					const completeTransition = dragProgress.current >= COMPLETE_THRESHOLD;
 					targetProgress.current = completeTransition ? 1 : 0;
+					// if (mx > 0) {
+					// 	const completeTransition = dragProgress.current >= COMPLETE_THRESHOLD;
+					// 	targetProgress.current = completeTransition ? 1 : 0;
+					// 	console.log(1);
+					// } else {
+					// 	const completeTransition = dragProgress.current <= COMPLETE_THRESHOLD;
+					// 	targetProgress.current = completeTransition ? 1 : 0;
+					// 	console.log(2);
+					// }
+					// console.log("this triggers");
 				}
 			}
 		}
