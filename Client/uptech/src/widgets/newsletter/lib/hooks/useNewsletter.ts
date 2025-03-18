@@ -6,7 +6,7 @@ import { useWindowSize } from "@shared/lib/hooks";
 
 import { newsletterFormSchema } from "../../model";
 
-enum NewsletterFormState {
+export enum NewsletterFormState {
 	IDLE = "idle",
 	LOADING = "loading",
 	SUCCESS = "success",

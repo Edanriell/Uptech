@@ -4,10 +4,16 @@ import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@shared/ui/button/ui";
 import { Spinner } from "@shared/ui/spinner/ui";
 
+import { NewsletterFormState } from "../lib/hooks";
+
 type NewsletterSubmitButtonProps = {
-	formState: any;
+	formState: NewsletterFormState;
 	windowWidth: number;
 };
+
+// TODO
+// Fix animations
+// Fix button animations
 
 export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 	formState,
@@ -30,21 +36,21 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 
 	const renderButtonStaticLayerContent = (state: typeof formState) => {
 		switch (state) {
-			case "idle":
+			case NewsletterFormState.IDLE:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
 						Subscribe
 					</span>
 				);
-			case "loading":
+			case NewsletterFormState.LOADING:
 				return <Spinner width={32} height={32} />;
-			case "success":
+			case NewsletterFormState.SUCCESS:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
 						Subscribed 🎉
 					</span>
 				);
-			case "failure":
+			case NewsletterFormState.FAILURE:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
 						Try again ❌
@@ -57,13 +63,13 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 
 	const renderButtonDynamicLayerContent = (state: typeof formState) => {
 		switch (state) {
-			case "idle":
+			case NewsletterFormState.IDLE:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
 						Subscribe
 					</span>
 				);
-			case "loading":
+			case NewsletterFormState.LOADING:
 				return (
 					<Spinner
 						width={32}
@@ -72,13 +78,13 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 						secondaryColor="rgba(0,0,0, 1)"
 					/>
 				);
-			case "success":
+			case NewsletterFormState.SUCCESS:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
 						Subscribed 🎉
 					</span>
 				);
-			case "failure":
+			case NewsletterFormState.FAILURE:
 				return (
 					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
 						Try again ❌
