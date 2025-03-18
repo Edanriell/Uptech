@@ -6,6 +6,9 @@ import { PerspectiveCamera, Plane, shaderMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useGesture } from "@use-gesture/react";
 
+// TODO
+// Refactor whole component
+
 // Create a custom shader material with swapped condition.
 const SliderMaterial = shaderMaterial(
 	{

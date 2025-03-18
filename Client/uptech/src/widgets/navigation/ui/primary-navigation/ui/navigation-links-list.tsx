@@ -1,4 +1,4 @@
-import { Children, type FC, isValidElement, type ReactElement } from "react";
+import { Children, type FC, isValidElement, type ReactElement, type ReactNode } from "react";
 import clsx from "clsx";
 
 import { usePrimaryNavigationStore } from "../lib/hooks";
@@ -9,9 +9,7 @@ type NavigationLinksListProps = {
 	children: ReactElement<typeof NavigationLink>[];
 };
 
-export const NavigationLinksList: FC<NavigationLinksListProps> = ({ children }) => {
-	const { orientationRef, globalClassesRef } = usePrimaryNavigationStore();
-
+const validateNavigationLinksList = (children: ReactNode): void => {
 	Children.forEach(children, (child) => {
 		if (!(isValidElement(child) && child.type === NavigationLink)) {
 			const childType =
@@ -23,6 +21,12 @@ export const NavigationLinksList: FC<NavigationLinksListProps> = ({ children }) 
 			);
 		}
 	});
+};
+
+export const NavigationLinksList: FC<NavigationLinksListProps> = ({ children }) => {
+	const { orientationRef, globalClassesRef } = usePrimaryNavigationStore();
+
+	validateNavigationLinksList(children);
 
 	const navigationLinksListClasses = clsx(
 		"relative flex w-full justify-center" + globalClassesRef!.current,

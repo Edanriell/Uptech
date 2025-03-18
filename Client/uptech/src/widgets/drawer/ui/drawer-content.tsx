@@ -1,4 +1,4 @@
-import React, { Children, type FC, isValidElement, type ReactNode } from "react";
+import { Children, type FC, isValidElement, type ReactNode } from "react";
 
 import { useProcessedDrawerContent } from "../lib/hooks";
 
@@ -19,12 +19,10 @@ export const validateDrawerContentChildren = (children: ReactNode) => {
 			typeof child.type === "string"
 				? child.type
 				: typeof child.type === "function" || typeof child.type === "object"
-					? (child.type as React.FC).displayName ||
-						(child.type as React.FC).name ||
-						"Unknown"
+					? (child.type as FC).displayName || (child.type as FC).name || "Unknown"
 					: "Unknown";
 
-		if (!child.props?.["data-content-id"]) {
+		if (!child.props?.["data-content-id" as never]) {
 			throw new Error(
 				`Each child of <Drawer.Content> must have a "data-content-id" attribute. ` +
 					`The child component "${childComponentName}" is missing this attribute.`

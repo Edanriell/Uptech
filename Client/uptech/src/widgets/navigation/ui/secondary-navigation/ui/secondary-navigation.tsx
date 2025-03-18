@@ -1,4 +1,11 @@
-import { Children, type FC, isValidElement, type JSX, type ReactElement } from "react";
+import {
+	Children,
+	type FC,
+	isValidElement,
+	type JSX,
+	type ReactElement,
+	type ReactNode
+} from "react";
 
 import { SecondaryNavigationProvider } from "../model";
 
@@ -25,11 +32,7 @@ type SecondaryNavigationProps = {
 
 type SecondaryNavigation = FC<SecondaryNavigationProps> & SecondaryNavigationComponents;
 
-export const SecondaryNavigation: SecondaryNavigation = ({
-	className = "",
-	orientation = "horizontal",
-	children
-}) => {
+const validateSecondaryNavigation = (children: ReactNode): void => {
 	Children.forEach(children, (child) => {
 		if (!(isValidElement(child) && child.type === NavigationLinksList)) {
 			const childType =
@@ -42,6 +45,14 @@ export const SecondaryNavigation: SecondaryNavigation = ({
 			);
 		}
 	});
+};
+
+export const SecondaryNavigation: SecondaryNavigation = ({
+	className = "",
+	orientation = "horizontal",
+	children
+}) => {
+	validateSecondaryNavigation(children);
 
 	return (
 		<SecondaryNavigationProvider>

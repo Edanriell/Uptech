@@ -100,7 +100,3 @@ export const Newsletter: FC = () => {
 // TODO
 // Buttons of drawer must highlight when drawer opened, we can use red color crimson 600
 // Also drawer exit animation must use radix
-// Refactor all components to useHook pattern if possible
-
-// TODO
-// Create ThreeJs slider !!!!!!!!!!

@@ -1,7 +1,7 @@
-import { createContext, type MutableRefObject } from "react";
+import { createContext, type RefObject } from "react";
 
 export type SecondaryNavigationStore = {
-	orientationRef: MutableRefObject<"horizontal" | "vertical" | null>;
+	orientationRef: RefObject<"horizontal" | "vertical" | null>;
 };
 
 export const SecondaryNavigationContext = createContext<SecondaryNavigationStore | null>(null);

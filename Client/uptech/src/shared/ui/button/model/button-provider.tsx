@@ -1,5 +1,6 @@
 import { ReactNode, useState } from "react";
-import { ButtonContext } from "@shared/ui/button/model/button-context";
+
+import { ButtonContext } from "./button-context";
 
 type ButtonProviderProps = {
 	children: ReactNode;

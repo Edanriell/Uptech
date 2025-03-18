@@ -48,26 +48,17 @@
   --color-alizarin-crimson-900: #891321;
   --color-alizarin-crimson-950: #4b040d;
 
+  --shadow-soft: 0 4rem 12rem #0000001a;
+
   --animate-primary-layer-slide-in: primary-layer-slide-in 1s forwards;
   --animate-primary-layer-slide-out: primary-layer-slide-out 1s forwards;
   --animate-secondary-layer-slide-in: secondary-layer-slide-in 1s forwards;
   --animate-secondary-layer-slide-out: secondary-layer-slide-out 1s forwards;
 
-  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(
-    from 180deg at 50% 50%,
-    var(--tw-gradient-stops)
-  );
-
   --grid-template-columns-mobile-navigation-auto-fit: repeat(
     auto-fit,
     minmax(147px, 1fr)
   );
-
-  --width-fill-chrome: -webkit-fill-available;
-  --width-fill-firefox: -moz-available;
-
-  --shadow-soft: 0 4rem 12rem #0000001a;
 
   @keyframes primary-layer-slide-in {
     0% {

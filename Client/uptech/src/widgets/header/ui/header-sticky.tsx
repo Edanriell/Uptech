@@ -99,7 +99,7 @@ export const HeaderSticky: FC = () => {
 		<motion.header
 			animate={animationControls}
 			variants={stickyHeaderAnimationVariants}
-			className="shadow-soft pt-[18rem] pr-[24rem] pb-[18rem] pl-[16rem] flex flex-row items-center rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] m-[16rem] fixed top-0 left-0 w-fill-chrome w-fill-firefox max-h-[64rem] justify-between tablet:max-h-[80rem] tablet:invisible z-30"
+			className="shadow-soft pt-[18rem] pr-[24rem] pb-[18rem] pl-[16rem] flex flex-row items-center rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] m-[16rem] fixed top-0 left-0 w-[-webkit-fill-available] w-[-moz-available] max-h-[64rem] justify-between tablet:max-h-[80rem] tablet:invisible z-30"
 			role="banner"
 			aria-label="Sticky header"
 		>

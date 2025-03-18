@@ -150,7 +150,7 @@ export const MobileNavigation: MobileNavigation = ({ className }) => {
 	const { mobileNavigationState, mobileNavigationRef } = useMobileNavigation();
 
 	const mobileNavigationClasses = clsx(
-		"m-[16rem] flex flex-row gap-x-[16rem] w-fill-firefox w-fill-chrome",
+		"m-[16rem] flex flex-row gap-x-[16rem] w-[-webkit-fill-available] w-[-moz-available]",
 		{
 			[className!]: className
 		}

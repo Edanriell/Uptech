@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 
 import { type Drawer, type DrawerConfig, DrawerContext } from "./drawer-context";
 
@@ -24,7 +24,8 @@ export const DrawerProvider = ({ children }: DrawerProviderProps) => {
 		}
 
 		const targetContent = drawersContent.current.find(
-			(content) => (content as ReactElement).props["data-content-id"] === contentId
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(content) => (content as any).props["data-content-id"] === contentId
 		);
 
 		if (!targetContent) {

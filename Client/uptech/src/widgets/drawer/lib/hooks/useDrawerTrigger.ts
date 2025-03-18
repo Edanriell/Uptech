@@ -25,8 +25,11 @@ export const useDrawerTrigger = (children: ReactNode) => {
 	const validateDrawerTriggerChildren = useCallback((nodes: ReactNode): boolean => {
 		return Children.toArray(nodes).some((node) => {
 			if (!isValidElement(node)) return false;
-			if (node.props?.["data-content-id"]) return true;
-			if (node.props?.children) return validateDrawerTriggerChildren(node.props.children);
+			if (node.props?.["data-content-id" as never]) return true;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			if ((node.props as any)?.children)
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				return validateDrawerTriggerChildren((node.props as any).children);
 			return false;
 		});
 	}, []);
@@ -47,8 +50,9 @@ export const useDrawerTrigger = (children: ReactNode) => {
 					return child;
 				}
 
-				const contentId = child.props?.["data-content-id"];
-				const existingOnClick = child.props?.onClick;
+				const contentId = child.props?.["data-content-id" as never];
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const existingOnClick = (child.props as any)?.onClick;
 
 				if (contentId) {
 					return cloneElement(child, {
@@ -64,9 +68,11 @@ export const useDrawerTrigger = (children: ReactNode) => {
 				}
 
 				// Recursively process nested children
-				if (child.props?.children) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				if ((child.props as any)?.children) {
 					return cloneElement(child, {
-						children: renderChildren(child.props.children)
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						children: renderChildren((child.props as any).children)
 					} as Partial<typeof child.props>);
 				}
 

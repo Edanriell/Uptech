@@ -1,12 +1,12 @@
-import { type MutableRefObject, useEffect } from "react";
+import { type RefObject, useEffect } from "react";
 import { useAnimationControls } from "motion/react";
 
 import { calculateClipPath } from "../functions";
 
 export const useClipPathNavigationLinksList = (
-	containerRef: MutableRefObject<HTMLDivElement | null>,
+	containerRef: RefObject<HTMLDivElement | null>,
 	activeLink: string,
-	activeLinkElementRef: MutableRefObject<HTMLAnchorElement | null>,
+	activeLinkElementRef: RefObject<HTMLAnchorElement | null>,
 	orientation: "horizontal" | "vertical"
 ) => {
 	const animationControls = useAnimationControls();

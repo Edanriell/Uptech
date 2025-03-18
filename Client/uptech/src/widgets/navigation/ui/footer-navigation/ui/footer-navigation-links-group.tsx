@@ -1,4 +1,4 @@
-import { type FC, isValidElement, type ReactElement } from "react";
+import { type FC, isValidElement, type ReactElement, type ReactNode } from "react";
 
 import { FooterNavigationLinksList } from "./footer-navigation-links-list";
 
@@ -7,7 +7,7 @@ type NavigationLinksGroupProps = {
 	children: ReactElement;
 };
 
-export const FooterNavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name, children }) => {
+const validateNavigationLinksGroup = (children: ReactNode): void => {
 	if (!(isValidElement(children) && children.type === FooterNavigationLinksList)) {
 		throw new Error(
 			`<NavigationLinksGroup> expects exactly one child of type <NavigationLinksList>. ` +
@@ -15,6 +15,10 @@ export const FooterNavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name
 				`Ensure a single <NavigationLinksList> component is passed as a direct child.`
 		);
 	}
+};
+
+export const FooterNavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name, children }) => {
+	validateNavigationLinksGroup(children);
 
 	return (
 		<div className="flex flex-col gap-y-[24rem] grow-0 shrink-0">

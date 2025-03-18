@@ -162,5 +162,6 @@ type IconProps = {
 
 export const Icon: FC<IconProps> = ({ type, productCount }) => {
 	const Icon = iconVariants[type];
+
 	return <Fragment>{Icon(productCount)}</Fragment>;
 };
