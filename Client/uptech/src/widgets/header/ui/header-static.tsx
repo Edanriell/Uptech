@@ -67,7 +67,7 @@ const staticHeaderSecondaryNavigationLinks = new Map<
 
 export const HeaderStatic: FC = () => {
 	return (
-		<header className="pl-[32rem] pr-[32rem] mt-[24rem] mb-[24rem] flex-row items-center justify-between max-h-[80rem] hidden tablet:flex relative z-[20]">
+		<header className="pl-[32rem] pr-[32rem] mt-[24rem] mb-[24rem] flex-row items-center justify-between max-h-[80rem] hidden tablet:flex relative z-20">
 			<Link href="/">
 				<Logotype size="medium" color="dark" />
 			</Link>

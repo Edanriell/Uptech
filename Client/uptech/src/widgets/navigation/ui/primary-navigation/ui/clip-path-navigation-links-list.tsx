@@ -49,7 +49,7 @@ export const ClipPathNavigationLinksList: FC<ClipPathNavigationLinksListProps> =
 			animate={animationControls}
 			aria-hidden
 			ref={containerRef}
-			className="absolute z-[10] w-full overflow-hidden"
+			className="absolute z-10 w-full overflow-hidden"
 			style={{
 				clipPath: "inset(0% 100%)"
 			}}

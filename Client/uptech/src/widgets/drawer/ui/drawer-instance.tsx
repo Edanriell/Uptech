@@ -27,10 +27,10 @@ export const DrawerInstance: FC<DrawerInstanceProps> = ({ id, index, reversedInd
 	const interactiveDrawerClasses = clsx(
 		"fixed rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] p-[20rem] shadow-soft",
 		{
-			"top-[14%] right-[0] origin-top-right mr-[24rem]": config.drawerPosition === "right",
-			"top-[14%] left-[0] origin-top-left ml-[24rem]": config.drawerPosition === "left",
-			"bottom-[0] left-[0] origin-bottom m-[16rem]": config.drawerPosition === "bottom",
-			"top-[0] left-[0] origin-top m-[16rem]": config.drawerPosition === "top"
+			"top-[14%] right-0 origin-top-right mr-[24rem]": config.drawerPosition === "right",
+			"top-[14%] left-0 origin-top-left ml-[24rem]": config.drawerPosition === "left",
+			"bottom-0 left-0 origin-bottom m-[16rem]": config.drawerPosition === "bottom",
+			"top-0 left-0 origin-top m-[16rem]": config.drawerPosition === "top"
 		}
 	);
 

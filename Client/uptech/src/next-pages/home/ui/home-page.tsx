@@ -11,7 +11,7 @@ import { ImageSlider } from "@widgets/hero-slider/ui";
 
 export const HomePage: FC = () => {
 	return (
-		<main className="relative z-[20]">
+		<main className="relative z-20">
 			<h1>Home Page</h1>
 			<ImageSlider />
 			{/*<ThreeDLoaderWithCursorFollow*/}

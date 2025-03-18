@@ -17,7 +17,7 @@ export const FooterNavigationLinksGroup: FC<NavigationLinksGroupProps> = ({ name
 	}
 
 	return (
-		<div className="flex flex-col gap-y-[24rem] flex-grow-0 flex-shrink-0">
+		<div className="flex flex-col gap-y-[24rem] grow-0 shrink-0">
 			<header className="relative">
 				<h3 className="font-medium text-[20rem] leading-[125%] text-[#FFFFFFE5]">{name}</h3>
 			</header>

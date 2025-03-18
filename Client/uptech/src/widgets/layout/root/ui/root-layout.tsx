@@ -1,6 +1,3 @@
-import "sanitize.css";
-import "sanitize.css/forms.css";
-import "sanitize.css/typography.css";
 import "@app/_styles/styles.css";
 
 import { type FC, type ReactNode } from "react";

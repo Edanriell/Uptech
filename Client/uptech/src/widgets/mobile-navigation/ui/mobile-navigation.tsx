@@ -164,13 +164,13 @@ export const MobileNavigation: MobileNavigation = ({ className }) => {
 				variants={mobileNavigationAnimationVariants}
 				onAnimationStart={() => {
 					if (mobileNavigationState === "opened")
-						mobileNavigationRef.current?.classList.add("z-[30]");
+						mobileNavigationRef.current?.classList.add("z-30");
 				}}
 				onAnimationComplete={() => {
 					if (mobileNavigationState === "closed")
-						mobileNavigationRef.current?.classList.remove("z-[30]");
+						mobileNavigationRef.current?.classList.remove("z-30");
 				}}
-				className="shadow-soft pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] flex flex-col items-start flex-[1]"
+				className="shadow-soft pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] flex flex-col items-start flex-1"
 			>
 				<PrimaryNavigation orientation="vertical">
 					<PrimaryNavigation.NavigationLinksList>
@@ -191,7 +191,7 @@ export const MobileNavigation: MobileNavigation = ({ className }) => {
 				initial="initial"
 				animate={mobileNavigationState === "opened" ? "visible" : "hidden"}
 				variants={mobileNavigationAnimationVariants2}
-				className="shadow-soft rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] flex-[0]"
+				className="shadow-soft rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] flex-0"
 			>
 				<Drawer.Trigger>
 					<SecondaryNavigation

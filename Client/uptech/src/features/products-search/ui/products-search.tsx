@@ -203,7 +203,7 @@ export const ProductsSearch: FC<ProductsSearchProps> = ({
 								style={{ objectFit: "cover", height: "140rem", width: "100%" }}
 							/>
 							<div className="p-[12rem] font-medium">
-								<h2 className="text-[12rem] whitespace-nowrap overflow-ellipsis w-full overflow-hidden">
+								<h2 className="text-[12rem] whitespace-nowrap text-ellipsis w-full overflow-hidden">
 									{name}
 								</h2>
 							</div>

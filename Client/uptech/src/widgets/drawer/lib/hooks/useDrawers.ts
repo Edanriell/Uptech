@@ -10,7 +10,7 @@ export const useDrawers = () => {
 		if (!drawerRoot) {
 			drawerRoot = document.createElement("div");
 			drawerRoot.id = "drawer-root";
-			drawerRoot.className = "relative z-[20]";
+			drawerRoot.className = "relative z-20";
 			document.body.appendChild(drawerRoot);
 		}
 	}, []);
