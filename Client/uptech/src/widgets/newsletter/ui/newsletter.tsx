@@ -1,58 +1,15 @@
 "use client";
 
-import { type FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { type FC } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
-import { useWindowSize } from "@shared/lib/hooks";
-
-import { newsletterFormSchema } from "../model";
+import { useNewsletterForm } from "../lib/hooks";
 
 import { NewsletterSubmitButton } from "./newsletter-submit-button";
 
 export const Newsletter: FC = () => {
-	const [newsletterFormState, setNewsletterFormState] = useState<
-		"idle" | "loading" | "success" | "failure"
-	>("idle");
-
-	const { width } = useWindowSize();
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm({
-		resolver: yupResolver(newsletterFormSchema)
-	});
-
-	const handleNewsletterFormSubmit = async (data: { email: string }) => {
-		const randomNumber = Math.floor(Math.random() * 11);
-
-		const fakeDataSend = new Promise<string>((resolve, reject) => {
-			setTimeout(() => {
-				if (randomNumber >= 5) {
-					resolve("Subscription successful!");
-				} else {
-					reject("Subscription failed. Please try again.");
-				}
-			}, 5000);
-		});
-
-		try {
-			setNewsletterFormState("loading");
-			const result = await fakeDataSend;
-			setNewsletterFormState("success");
-			console.log("Data sent successfully:", result);
-		} catch (error) {
-			setNewsletterFormState("failure");
-			console.error("Data failed to send:", error);
-		} finally {
-			setTimeout(() => {
-				setNewsletterFormState("idle");
-			}, 5000);
-		}
-	};
+	const { formState, windowWidth, register, handleSubmit, errors, handleNewsletterFormSubmit } =
+		useNewsletterForm();
 
 	return (
 		<div className="tablet:basis-[43%] desktop:mr-[unset] desktop:basis-[477rem]">
@@ -88,7 +45,7 @@ export const Newsletter: FC = () => {
 						)}
 					</AnimatePresence>
 				</div>
-				<NewsletterSubmitButton windowWidth={width} formState={newsletterFormState} />
+				<NewsletterSubmitButton windowWidth={windowWidth} formState={formState} />
 			</form>
 		</div>
 	);
