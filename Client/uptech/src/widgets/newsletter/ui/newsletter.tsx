@@ -20,7 +20,7 @@ export const Newsletter: FC = () => {
 				onSubmit={handleSubmit(handleNewsletterFormSubmit)}
 				className="flex flex-col gap-y-[8rem] mb-[40rem] tablet:flex-row tablet:gap-x-[8rem] tablet:mb-[unset]"
 			>
-				<div className="relative w-full tablet:basis-[320rem]">
+				<motion.div layout className="relative w-full tablet:basis-[320rem]">
 					<label className="visually-hidden" htmlFor="email">
 						Enter your email
 					</label>
@@ -44,7 +44,7 @@ export const Newsletter: FC = () => {
 							</motion.p>
 						)}
 					</AnimatePresence>
-				</div>
+				</motion.div>
 				<NewsletterSubmitButton windowWidth={windowWidth} formState={formState} />
 			</form>
 		</div>

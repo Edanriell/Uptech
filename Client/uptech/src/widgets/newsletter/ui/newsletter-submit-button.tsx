@@ -14,9 +14,6 @@ type NewsletterSubmitButtonProps = {
 // TODO
 // Fix animations
 
-// Disable button
-// Fix button animations
-
 export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 	formState,
 	windowWidth
@@ -48,14 +45,16 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 				return <Spinner width={32} height={32} />;
 			case NewsletterFormState.SUCCESS:
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
-						Subscribed 🎉
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium gap-x-[6rem]">
+						Subscribed
+						<span>🎉</span>
 					</span>
 				);
 			case NewsletterFormState.FAILURE:
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium">
-						Try again ❌
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-white-50 font-medium gap-x-[6rem]">
+						Try again
+						<span>❌</span>
 					</span>
 				);
 			default:
@@ -82,14 +81,16 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 				);
 			case NewsletterFormState.SUCCESS:
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
-						Subscribed 🎉
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold gap-x-[6rem]">
+						Subscribed
+						<span>🎉</span>
 					</span>
 				);
 			case NewsletterFormState.FAILURE:
 				return (
-					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold">
-						Try again ❌
+					<span className="drop-shadow-lg flex w-full justify-center items-start text-shark-950 font-semibold gap-x-[6rem]">
+						Try again
+						<span>❌</span>
 					</span>
 				);
 			default:
@@ -100,7 +101,7 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 	return (
 		<Button.Provider>
 			<Button
-				className="tablet:w-[149rem]"
+				className="tablet:w-[149rem] shrink-0 grow-0"
 				transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.35 }}
 				type="submit"
 				variants={submitButtonAnimationVariants}
