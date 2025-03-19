@@ -40,6 +40,8 @@ export const useNewsletterForm = (): UseNewsletterForm => {
 	});
 
 	const handleNewsletterFormSubmit = async (data: { email: string }) => {
+		if (formState !== NewsletterFormState.IDLE) return;
+
 		const randomNumber = Math.floor(Math.random() * 11);
 
 		const fakeDataSend = new Promise<string>((resolve, reject) => {
