@@ -13,6 +13,8 @@ type NewsletterSubmitButtonProps = {
 
 // TODO
 // Fix animations
+
+// Disable button
 // Fix button animations
 
 export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
