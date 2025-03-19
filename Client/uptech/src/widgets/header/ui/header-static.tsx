@@ -44,7 +44,7 @@ const staticHeaderSecondaryNavigationLinks = new Map<
 		{
 			name: "Search",
 			Icon: () => <Icon type="search" />,
-			contentId: "1x"
+			contentId: "search"
 		}
 	],
 	[
@@ -52,7 +52,7 @@ const staticHeaderSecondaryNavigationLinks = new Map<
 		{
 			name: "Profile",
 			Icon: () => <Icon type="profile" />,
-			contentId: "2x"
+			contentId: "profile"
 		}
 	],
 	[
@@ -60,7 +60,7 @@ const staticHeaderSecondaryNavigationLinks = new Map<
 		{
 			name: "Cart",
 			Icon: () => <Icon type="cart" productCount={0} />,
-			contentId: "3x"
+			contentId: "cart"
 		}
 	]
 ]);
