@@ -10,11 +10,11 @@ type NavigationLinkProps = {
 const navigationLinkAnimationVariants = {
 	hover: {
 		scale: 1.2,
-		transition: { type: "spring", duration: 0.3, bounce: 0 }
+		transition: { type: "spring", duration: 0.2, bounce: 0 }
 	},
 	tap: {
 		scale: 0.8,
-		transition: { type: "spring", duration: 0.3, bounce: 0 }
+		transition: { type: "spring", duration: 0.2, bounce: 0 }
 	}
 };
 
@@ -26,6 +26,7 @@ export const NavigationLink: FC<NavigationLinkProps> = ({ name, Icon, ...rest })
 				whileHover={"hover"}
 				whileTap={"tap"}
 				type={"button"}
+				style={{ cursor: "pointer" }}
 				{...rest}
 			>
 				<span className="sr-only">{name}</span>

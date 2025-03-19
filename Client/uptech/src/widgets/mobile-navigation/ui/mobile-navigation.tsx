@@ -83,9 +83,9 @@ const mobileNavigationSecondaryNavigationLinks = new Map<
 const mobileNavigationAnimationVariants: Variants = {
 	initial: {
 		visibility: "hidden",
-		filter: "blur(5rem)",
+		filter: "blur(3.8rem)",
 		opacity: 0,
-		y: 20
+		y: 40
 	},
 	visible: {
 		visibility: "visible",
@@ -95,20 +95,20 @@ const mobileNavigationAnimationVariants: Variants = {
 		transition: {
 			delay: 0,
 			type: "spring",
-			bounce: 0.25,
-			duration: 0.45
+			bounce: 0,
+			duration: 0.5
 		}
 	},
 	hidden: {
 		visibility: "hidden",
-		filter: "blur(5rem)",
+		filter: "blur(3.8rem)",
 		opacity: 0,
-		y: 20,
+		y: 40,
 		transition: {
 			delay: 0.25,
 			type: "spring",
 			bounce: 0,
-			duration: 0.4
+			duration: 0.5
 		}
 	}
 };
@@ -116,9 +116,9 @@ const mobileNavigationAnimationVariants: Variants = {
 const mobileNavigationAnimationVariants2: Variants = {
 	initial: {
 		visibility: "hidden",
-		filter: "blur(5rem)",
+		filter: "blur(3.8rem)",
 		opacity: 0,
-		x: 20
+		x: 40
 	},
 	visible: {
 		visibility: "visible",
@@ -128,20 +128,20 @@ const mobileNavigationAnimationVariants2: Variants = {
 		transition: {
 			delay: 0.25,
 			type: "spring",
-			bounce: 0.25,
-			duration: 0.45
+			bounce: 0,
+			duration: 0.5
 		}
 	},
 	hidden: {
 		visibility: "hidden",
-		filter: "blur(5rem)",
+		filter: "blur(3.8rem)",
 		opacity: 0,
-		x: 20,
+		x: 40,
 		transition: {
 			delay: 0,
 			type: "spring",
 			bounce: 0,
-			duration: 0.4
+			duration: 0.25
 		}
 	}
 };

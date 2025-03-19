@@ -14,20 +14,20 @@ const mobileNavigationTriggerBarAnimationVariants = {
 			top: "50%",
 			y: "-50%",
 			rotate: 135,
-			transition: { type: "spring", bounce: 0, duration: 0.45 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		},
 		bar2: {
 			opacity: 0,
 			top: "50%",
-			y: "-70%",
+			y: "-50%",
 			x: -20,
-			transition: { type: "spring", bounce: 0, duration: 0.45 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		},
 		bar3: {
 			bottom: "50%",
 			y: "50%",
 			rotate: -135,
-			transition: { type: "spring", bounce: 0, duration: 0.45 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		}
 	},
 	closed: {
@@ -35,20 +35,20 @@ const mobileNavigationTriggerBarAnimationVariants = {
 			top: "0%",
 			y: 0,
 			rotate: 0,
-			transition: { type: "spring", bounce: 0, duration: 0.4 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		},
 		bar2: {
 			opacity: 1,
 			top: "50%",
-			y: "-70%",
+			y: "-50%",
 			x: 0,
-			transition: { type: "spring", bounce: 0, duration: 0.4 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		},
 		bar3: {
 			bottom: "0%",
 			y: "-50%",
 			rotate: 0,
-			transition: { type: "spring", bounce: 0, duration: 0.4 }
+			transition: { type: "spring", bounce: 0, duration: 0.5 }
 		}
 	}
 };
@@ -60,13 +60,13 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 	const { mobileNavigationState, toggleMobileNavigation } = useMobileNavigationTrigger();
 
 	const buttonClasses = clsx(
-		"rounded-[8rem] p-[8rem] w-[40rem] h-[40rem] flex items-center justify-center overflow-auto tablet:hidden",
+		"rounded-[8rem] p-[8rem] w-[40rem] h-[40rem] flex items-center justify-center overflow-auto tablet:hidden cursor-pointer",
 		className
 	);
 
 	const barClasses = {
 		bar1: "absolute w-full h-[1.9rem] top-0 left-0 bg-white-50 rounded-full",
-		bar2: "absolute w-full h-[1.9rem] top-[50%] translate-y-[-70%] left-0 bg-white-50 rounded-full",
+		bar2: "absolute w-full h-[1.9rem] top-[50%] translate-y-[-50%] left-0 bg-white-50 rounded-full",
 		bar3: "absolute w-full h-[1.9rem] bottom-0 translate-y-[-50%] left-0 bg-white-50 rounded-full"
 	};
 
