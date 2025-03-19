@@ -1,12 +1,10 @@
-import { type FC, type ReactNode, useEffect } from "react";
+import { type FC, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { motion, type PanInfo, type Variants } from "motion/react";
+import { motion } from "motion/react";
 import clsx from "clsx";
 
-import { removeLettersFromString } from "@shared/lib/functions";
-
 import { getDragAxis, getDragConstraints } from "../lib/functions";
-import { useDrawerStore } from "../lib/hooks";
+import { useDrawerInstance } from "../lib/hooks";
 
 type DrawerInstanceProps = {
 	id: string;
@@ -16,215 +14,23 @@ type DrawerInstanceProps = {
 };
 
 export const DrawerInstance: FC<DrawerInstanceProps> = ({ id, index, reversedIndex, children }) => {
-	const { config, closeDrawer, reorderDrawer } = useDrawerStore();
-
-	useEffect(() => {
-		const handleEscapeKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "Escape") {
-				closeDrawer(id);
-			}
-		};
-
-		window.addEventListener("keydown", handleEscapeKeyDown);
-
-		return () => window.removeEventListener("keydown", handleEscapeKeyDown);
-	}, [closeDrawer]);
-
-	const IS_DRAWER_FIRST_IN_STACK = reversedIndex === 0;
-	const IS_DRAWER_LAST_IN_STACK = reversedIndex > config.maxDrawers! - 1;
-
-	const initialAnimationVariants: Variants = {
-		right: {
-			opacity: 0,
-			x: Number(removeLettersFromString(config.drawerWidth!)),
-			y: 0,
-			scale: 1,
-			filter: "blur(5rem)"
-		},
-		left: {
-			opacity: 0,
-			x: -Number(removeLettersFromString(config.drawerWidth!)),
-			y: 0,
-			scale: 1,
-			filter: "blur(5rem)"
-		},
-		bottom: {
-			opacity: 0,
-			x: 0,
-			y: `${config.drawerHeight}`,
-			scale: 1,
-			filter: "blur(5rem)"
-		},
-		top: {
-			opacity: 0,
-			x: 0,
-			y: `-${config.drawerHeight}`,
-			scale: 1,
-			filter: "blur(5rem)"
-		}
-	};
-
-	const defaultAnimationVariants: Variants = {
-		right: {
-			opacity: 1,
-			x: -70 * reversedIndex,
-			y: 30 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(0rem)"
-		},
-		left: {
-			opacity: 1,
-			x: 70 * reversedIndex,
-			y: 30 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(0rem)"
-		},
-		bottom: {
-			opacity: 1,
-			x: 0,
-			y: -70 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(0rem)"
-		},
-		top: {
-			opacity: 1,
-			x: 0,
-			y: 70 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(0rem)"
-		}
-	};
-
-	const lastAnimationVariants: Variants = {
-		right: {
-			opacity: 0,
-			x: -70 * config.maxDrawers!,
-			y: 30 * config.maxDrawers!,
-			scale: 1.0 - config.maxDrawers! / 13,
-			filter: "blur(5rem)"
-		},
-		left: {
-			opacity: 0,
-			x: 70 * config.maxDrawers!,
-			y: 30 * config.maxDrawers!,
-			scale: 1.0 - config.maxDrawers! / 13,
-			filter: "blur(5rem)"
-		},
-		bottom: {
-			opacity: 0,
-			x: 0,
-			y: -70 * config.maxDrawers!,
-			scale: 1.0 - config.maxDrawers! / 13,
-			filter: "blur(5rem)"
-		},
-		top: {
-			opacity: 0,
-			x: 0,
-			y: 70 * config.maxDrawers!,
-			scale: 1.0 - config.maxDrawers! / 13,
-			filter: "blur(5rem)"
-		}
-	};
-
-	const exitAnimationVariants: Variants = {
-		right: {
-			opacity: 0,
-			// x: config.drawerPosition === "left" ? config.drawerWidth : config.drawerWidth,
-			x: 380,
-			y: 30 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(5rem)"
-		},
-		left: {
-			opacity: 0,
-			// x: config.drawerPosition === "left" ? config.drawerWidth : config.drawerWidth,
-			x: -380,
-			y: 30 * reversedIndex,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(5rem)"
-		},
-		bottom: {
-			opacity: 0,
-			x: 0,
-			y: `${config.drawerHeight}`,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(5rem)"
-		},
-		top: {
-			opacity: 0,
-			x: 0,
-			y: `-${config.drawerHeight}`,
-			scale: 1.0 - reversedIndex / 10,
-			filter: "blur(5rem)"
-		}
-	};
-
-	const hoverAnimationVariants: Variants = {
-		right: {
-			x: -70 * reversedIndex - 20 * reversedIndex
-		},
-		left: {
-			x: 70 * reversedIndex + 20 * reversedIndex
-		},
-		bottom: {
-			y: -70 * reversedIndex - 20 * reversedIndex
-		},
-		top: {
-			y: 70 * reversedIndex + 20 * reversedIndex
-		}
-	};
-
-	const drawerAnimationVariants: Variants = {
-		initial: initialAnimationVariants[config.drawerPosition!],
-		default: defaultAnimationVariants[config.drawerPosition!],
-		last: lastAnimationVariants[config.drawerPosition!],
-		exit: exitAnimationVariants[config.drawerPosition!],
-		hover: hoverAnimationVariants[config.drawerPosition!]
-	};
-
-	const handleDrawerInteractionEnd = (event: Event, info: PanInfo) => {
-		const { offset, velocity } = info;
-
-		switch (config.drawerPosition) {
-			case "left": {
-				if (offset.x < 100 || velocity.x < 0.4) {
-					closeDrawer(id);
-				}
-			}
-			case "right": {
-				if (offset.x > 100 || velocity.x > 0.4) {
-					closeDrawer(id);
-				}
-			}
-			case "bottom": {
-				if (offset.y > 150 || velocity.y > 400) {
-					closeDrawer(id);
-				}
-			}
-			case "top": {
-				if (offset.y < -150 || velocity.y < -400) {
-					closeDrawer(id);
-				}
-			}
-		}
-	};
-
-	const handleDrawerReorder = () => {
-		reorderDrawer(id);
-	};
-
-	const handleDrawerDismiss = () => {
-		console.log("close");
-		closeDrawer(id);
-	};
+	const {
+		config,
+		drawerAnimationVariants,
+		IS_DRAWER_FIRST_IN_STACK,
+		IS_DRAWER_LAST_IN_STACK,
+		handleDrawerInteractionEnd,
+		handleDrawerReorder,
+		handleDrawerDismiss
+	} = useDrawerInstance(id, reversedIndex);
 
 	const interactiveDrawerClasses = clsx(
 		"fixed rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] p-[20rem] shadow-soft",
 		{
-			"top-[14%] right-[0] origin-top-right mr-[24rem]": config.drawerPosition === "right",
-			"top-[14%] left-[0] origin-top-left ml-[24rem]": config.drawerPosition === "left",
-			"bottom-[0] left-[0] origin-bottom m-[16rem]": config.drawerPosition === "bottom",
-			"top-[0] left-[0] origin-top m-[16rem]": config.drawerPosition === "top"
+			"top-[14%] right-0 origin-top-right mr-[24rem]": config.drawerPosition === "right",
+			"top-[14%] left-0 origin-top-left ml-[24rem]": config.drawerPosition === "left",
+			"bottom-0 left-0 origin-bottom m-[16rem]": config.drawerPosition === "bottom",
+			"top-0 left-0 origin-top m-[16rem]": config.drawerPosition === "top"
 		}
 	);
 
@@ -250,7 +56,7 @@ export const DrawerInstance: FC<DrawerInstanceProps> = ({ id, index, reversedInd
 			whileHover={IS_DRAWER_FIRST_IN_STACK ? "" : "hover"}
 			exit={"exit"}
 			animate={IS_DRAWER_LAST_IN_STACK ? "last" : "default"}
-			transition={{ type: "spring", duration: 0.6, bounce: 0 }}
+			transition={{ type: "spring", duration: 0.75, bounce: 0.25 }}
 			className={interactiveDrawerClasses}
 			style={{
 				width: config.drawerWidth!,

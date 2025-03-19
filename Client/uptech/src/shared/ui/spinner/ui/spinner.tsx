@@ -41,7 +41,7 @@ export const Spinner: FC<SpinnerProps> = ({
 			}}
 		>
 			<svg
-				className="absolute top-0 left-0 z-[1]"
+				className="absolute top-0 left-0 z-1"
 				xmlns="http://www.w3.org/2000/svg"
 				width={width}
 				height={height}
@@ -59,7 +59,7 @@ export const Spinner: FC<SpinnerProps> = ({
 				</g>
 			</svg>
 			<svg
-				className="absolute top-0 left-0 z-[2]"
+				className="absolute top-0 left-0 z-2"
 				xmlns="http://www.w3.org/2000/svg"
 				width={width}
 				height={height}

@@ -1,4 +1,4 @@
-import { type ComponentPropsWithoutRef, type FC, useRef } from "react";
+import { type ComponentPropsWithoutRef, type FC } from "react";
 import { motion, type MotionProps, type Variants } from "motion/react";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
@@ -12,9 +12,10 @@ import {
 	SecondaryNavigation,
 	SecondaryNavigationLink
 } from "@widgets/navigation/ui/secondary-navigation/ui";
-import { useHeaderStore } from "@widgets/header/model";
 
 import { Icon } from "@shared/ui/icon/ui";
+
+import { useMobileNavigation } from "../lib/hooks";
 
 import { MobileNavigationTrigger } from "./mobile-navigation-trigger";
 
@@ -94,7 +95,7 @@ const mobileNavigationAnimationVariants: Variants = {
 		transition: {
 			delay: 0,
 			type: "spring",
-			bounce: 0,
+			bounce: 0.25,
 			duration: 0.45
 		}
 	},
@@ -127,7 +128,7 @@ const mobileNavigationAnimationVariants2: Variants = {
 		transition: {
 			delay: 0.25,
 			type: "spring",
-			bounce: 0,
+			bounce: 0.25,
 			duration: 0.45
 		}
 	},
@@ -146,14 +147,10 @@ const mobileNavigationAnimationVariants2: Variants = {
 };
 
 export const MobileNavigation: MobileNavigation = ({ className }) => {
-	const mobileNavigationState = useHeaderStore(
-		({ mobileNavigationState }) => mobileNavigationState
-	);
-
-	const mobileNavigationRef = useRef<HTMLDivElement | null>(null);
+	const { mobileNavigationState, mobileNavigationRef } = useMobileNavigation();
 
 	const mobileNavigationClasses = clsx(
-		"m-[16rem] flex flex-row gap-x-[16rem] w-fill-firefox w-fill-chrome",
+		"m-[16rem] flex flex-row gap-x-[16rem] w-[-webkit-fill-available] w-[-moz-available]",
 		{
 			[className!]: className
 		}
@@ -167,13 +164,13 @@ export const MobileNavigation: MobileNavigation = ({ className }) => {
 				variants={mobileNavigationAnimationVariants}
 				onAnimationStart={() => {
 					if (mobileNavigationState === "opened")
-						mobileNavigationRef.current?.classList.add("z-[30]");
+						mobileNavigationRef.current?.classList.add("z-30");
 				}}
 				onAnimationComplete={() => {
 					if (mobileNavigationState === "closed")
-						mobileNavigationRef.current?.classList.remove("z-[30]");
+						mobileNavigationRef.current?.classList.remove("z-30");
 				}}
-				className="shadow-soft pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] flex flex-col items-start flex-[1]"
+				className="shadow-soft pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] flex flex-col items-start flex-1"
 			>
 				<PrimaryNavigation orientation="vertical">
 					<PrimaryNavigation.NavigationLinksList>
@@ -194,7 +191,7 @@ export const MobileNavigation: MobileNavigation = ({ className }) => {
 				initial="initial"
 				animate={mobileNavigationState === "opened" ? "visible" : "hidden"}
 				variants={mobileNavigationAnimationVariants2}
-				className="shadow-soft rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] flex-[0]"
+				className="shadow-soft rounded-[8rem] bg-[var(--white-transparent-10)] backdrop-blur-[40rem] pt-[18rem] pr-[16rem] pb-[18rem] pl-[16rem] flex-0"
 			>
 				<Drawer.Trigger>
 					<SecondaryNavigation

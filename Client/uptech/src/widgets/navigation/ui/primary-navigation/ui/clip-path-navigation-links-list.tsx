@@ -1,4 +1,11 @@
-import { Children, type FC, isValidElement, type ReactElement, useRef } from "react";
+import {
+	Children,
+	type FC,
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+	useRef
+} from "react";
 import { motion } from "motion/react";
 import clsx from "clsx";
 
@@ -8,6 +15,21 @@ import { ClipPathNavigationLink } from "./clip-path-navigation-link";
 
 type ClipPathNavigationLinksListProps = {
 	children: ReactElement<typeof ClipPathNavigationLink>[];
+};
+
+const validateClipPathNavigationLinksList = (children: ReactNode): void => {
+	Children.forEach(children, (child) => {
+		if (!(isValidElement(child) && child.type === ClipPathNavigationLink)) {
+			const childType =
+				isValidElement(child) && child.type ? child.type.toString() : typeof child;
+
+			throw new Error(
+				`<ClipPathNavigationLinksList> only accepts children of type <ClipPathNavigationLink>. ` +
+					`Received an invalid child of type "${childType}". ` +
+					`Please ensure that all children passed to <ClipPathNavigationLinksList> are valid <ClipPathNavigationLink> components.`
+			);
+		}
+	});
 };
 
 export const ClipPathNavigationLinksList: FC<ClipPathNavigationLinksListProps> = ({ children }) => {
@@ -23,18 +45,7 @@ export const ClipPathNavigationLinksList: FC<ClipPathNavigationLinksListProps> =
 		orientationRef.current!
 	);
 
-	Children.forEach(children, (child) => {
-		if (!(isValidElement(child) && child.type === ClipPathNavigationLink)) {
-			const childType =
-				isValidElement(child) && child.type ? child.type.toString() : typeof child;
-
-			throw new Error(
-				`<ClipPathNavigationLinksList> only accepts children of type <ClipPathNavigationLink>. ` +
-					`Received an invalid child of type "${childType}". ` +
-					`Please ensure that all children passed to <ClipPathNavigationLinksList> are valid <ClipPathNavigationLink> components.`
-			);
-		}
-	});
+	validateClipPathNavigationLinksList(children);
 
 	const clipPathNavigationLinksListClasses = clsx(
 		"relative flex w-full justify-center bg-alizarin-crimson-600" + globalClassesRef!.current,
@@ -49,7 +60,7 @@ export const ClipPathNavigationLinksList: FC<ClipPathNavigationLinksListProps> =
 			animate={animationControls}
 			aria-hidden
 			ref={containerRef}
-			className="absolute z-[10] w-full overflow-hidden"
+			className="absolute z-10 w-full overflow-hidden"
 			style={{
 				clipPath: "inset(0% 100%)"
 			}}

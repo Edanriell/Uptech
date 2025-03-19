@@ -1,10 +1,116 @@
-@import "./variables.css";
-@import "./fonts.css";
-@import "./reset.css";
+@import './variables.css' layer(base);
+@import './fonts.css' layer(base);
+@import './reset.css' layer(base);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-mobile: 390px;
+  --breakpoint-tablet: 990px;
+  --breakpoint-laptop: 1366px;
+  --breakpoint-desktop: 1440px;
+
+  --color-*: initial;
+  --color-white-50: #ffffff;
+  --color-white-100: #efefef;
+  --color-white-200: #dcdcdc;
+  --color-white-300: #bdbdbd;
+  --color-white-400: #989898;
+  --color-white-500: #7c7c7c;
+  --color-white-600: #656565;
+  --color-white-700: #525252;
+  --color-white-800: #464646;
+  --color-white-900: #3d3d3d;
+  --color-white-950: #292929;
+
+  --color-shark-50: #f6f6f6;
+  --color-shark-100: #e7e7e7;
+  --color-shark-200: #d1d1d1;
+  --color-shark-300: #b0b0b0;
+  --color-shark-400: #888888;
+  --color-shark-500: #6d6d6d;
+  --color-shark-600: #5d5d5d;
+  --color-shark-700: #4f4f4f;
+  --color-shark-800: #454545;
+  --color-shark-900: #3d3d3d;
+  --color-shark-950: #1f1f1f;
+
+  --color-alizarin-crimson-50: #fff1f3;
+  --color-alizarin-crimson-100: #ffdfe3;
+  --color-alizarin-crimson-200: #ffc5cc;
+  --color-alizarin-crimson-300: #ff9ca8;
+  --color-alizarin-crimson-400: #ff6477;
+  --color-alizarin-crimson-500: #ff334c;
+  --color-alizarin-crimson-600: #ef233c;
+  --color-alizarin-crimson-700: #c80d24;
+  --color-alizarin-crimson-800: #a50f21;
+  --color-alizarin-crimson-900: #891321;
+  --color-alizarin-crimson-950: #4b040d;
+
+  --shadow-soft: 0 4rem 12rem #0000001a;
+
+  --animate-primary-layer-slide-in: primary-layer-slide-in 1s forwards;
+  --animate-primary-layer-slide-out: primary-layer-slide-out 1s forwards;
+  --animate-secondary-layer-slide-in: secondary-layer-slide-in 1s forwards;
+  --animate-secondary-layer-slide-out: secondary-layer-slide-out 1s forwards;
+
+  --grid-template-columns-mobile-navigation-auto-fit: repeat(
+    auto-fit,
+    minmax(147px, 1fr)
+  );
+
+  @keyframes primary-layer-slide-in {
+    0% {
+      clip-path: inset(0 0 100% 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes primary-layer-slide-out {
+    0% {
+      clip-path: inset(0 0 0 0);
+    }
+    100% {
+      clip-path: inset(100% 0 0 0);
+    }
+  }
+  @keyframes secondary-layer-slide-in {
+    0% {
+      clip-path: inset(0 0 100% 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes secondary-layer-slide-out {
+    0% {
+      clip-path: inset(0 0 0 0);
+    }
+    100% {
+      clip-path: inset(100% 0 0 0);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 html {
 	font-size: 6.25%;

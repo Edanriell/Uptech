@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentType, useEffect, useRef, useState } from "react";
+import { type ComponentType, type MouseEvent, useEffect, useRef, useState } from "react";
 import { motion, useSpring } from "motion/react";
 
 import { clamp } from "../functions";
@@ -30,8 +30,9 @@ export const withCursorFollow = <T extends object>(
 		alwaysHover,
 		...props
 	}: WithCursorFollowProps & T) => {
-		const containerRef = useRef<HTMLDivElement | null>(null);
 		const [isHovering, setIsHovering] = useState<boolean>(alwaysHover ?? false);
+
+		const containerRef = useRef<HTMLDivElement | null>(null);
 
 		// If alwaysHover is true, ensure isHovering remains true
 		useEffect(() => {
@@ -43,6 +44,7 @@ export const withCursorFollow = <T extends object>(
 		const numericWidth = parseInt(String(width), 10);
 		const numericHeight = parseInt(String(height), 10);
 		const center = { x: numericWidth / 2, y: numericHeight / 2 };
+
 		const glowRadius = glowSize / 2;
 
 		// Create motion springs for x and y positions
@@ -50,12 +52,12 @@ export const withCursorFollow = <T extends object>(
 		const glowY = useSpring(center.y, { stiffness: 170, damping: 26 });
 
 		// Update glow position ensuring the glow stays within bounds
-		const handleMouseMove = (e: React.MouseEvent) => {
+		const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
 			if (!containerRef.current) return;
 
 			const rect = containerRef.current.getBoundingClientRect();
-			let newX = e.clientX - rect.left;
-			let newY = e.clientY - rect.top;
+			let newX = event.clientX - rect.left;
+			let newY = event.clientY - rect.top;
 
 			newX = clamp(newX, glowRadius, numericWidth - glowRadius);
 			newY = clamp(newY, glowRadius, numericHeight - glowRadius);
@@ -73,6 +75,7 @@ export const withCursorFollow = <T extends object>(
 		const handleMouseLeave = () => {
 			if (!alwaysHover) {
 				setIsHovering(false);
+
 				// Return glow back to center on mouse leave
 				glowX.set(center.x);
 				glowY.set(center.y);

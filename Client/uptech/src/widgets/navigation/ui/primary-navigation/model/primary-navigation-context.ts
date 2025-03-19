@@ -1,10 +1,10 @@
-import { createContext, type MutableRefObject } from "react";
+import { createContext, type RefObject } from "react";
 
 export type PrimaryNavigationStore = {
-	globalClassesRef: MutableRefObject<string | null>;
-	orientationRef: MutableRefObject<"horizontal" | "vertical" | null>;
-	containerRef: MutableRefObject<HTMLDivElement | null>;
-	activeLinkElementRef: MutableRefObject<HTMLAnchorElement | null>;
+	globalClassesRef: RefObject<string | null>;
+	orientationRef: RefObject<"horizontal" | "vertical" | null>;
+	containerRef: RefObject<HTMLDivElement | null>;
+	activeLinkElementRef: RefObject<HTMLAnchorElement | null>;
 	activeLink: string;
 	setActiveLink: (link: string) => void;
 	initializeActiveLink: (pathname: string) => void;

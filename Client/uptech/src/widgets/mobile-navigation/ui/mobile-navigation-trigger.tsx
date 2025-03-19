@@ -2,7 +2,7 @@ import { type ComponentPropsWithoutRef, type FC } from "react";
 import { motion } from "motion/react";
 import clsx from "clsx";
 
-import { useHeaderStore } from "@widgets/header/model";
+import { useMobileNavigationTrigger } from "../lib/hooks";
 
 type MobileNavigationTriggerProps = {
 	className?: string;
@@ -57,22 +57,17 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 	className,
 	...restProps
 }) => {
-	const mobileNavigationState = useHeaderStore(
-		({ mobileNavigationState }) => mobileNavigationState
-	);
-	const toggleMobileNavigation = useHeaderStore(
-		({ toggleMobileNavigation }) => toggleMobileNavigation
-	);
+	const { mobileNavigationState, toggleMobileNavigation } = useMobileNavigationTrigger();
 
 	const buttonClasses = clsx(
 		"rounded-[8rem] p-[8rem] w-[40rem] h-[40rem] flex items-center justify-center overflow-auto tablet:hidden",
 		className
 	);
 
-	const barStyles = {
+	const barClasses = {
 		bar1: "absolute w-full h-[1.9rem] top-0 left-0 bg-white-50 rounded-full",
 		bar2: "absolute w-full h-[1.9rem] top-[50%] translate-y-[-70%] left-0 bg-white-50 rounded-full",
-		bar3: "absolute w-full h-[1.9rem] bottom-[0] translate-y-[-50%] left-0 bg-white-50 rounded-full"
+		bar3: "absolute w-full h-[1.9rem] bottom-0 translate-y-[-50%] left-0 bg-white-50 rounded-full"
 	};
 
 	const renderMotionBar = (
@@ -84,7 +79,7 @@ export const MobileNavigationTrigger: FC<MobileNavigationTriggerProps> = ({
 				opened: mobileNavigationTriggerBarAnimationVariants["opened"][variantKey],
 				closed: mobileNavigationTriggerBarAnimationVariants["closed"][variantKey]
 			}}
-			className={barStyles[variantKey]}
+			className={barClasses[variantKey]}
 		/>
 	);
 

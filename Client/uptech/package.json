@@ -9,29 +9,36 @@
 		"start:lint": "next lint"
 	},
 	"dependencies": {
-		"@hookform/resolvers": "^3.10.0",
+		"@hookform/resolvers": "^4.1.3",
+		"@react-three/drei": "^10.0.4",
+		"@react-three/fiber": "^9.1.0",
+		"@use-gesture/react": "^10.3.1",
 		"clsx": "^2.1.1",
-		"motion": "12.0.0",
-		"next": "15.1.7",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
+		"motion": "^12.5.0",
+		"next": "15.2.3",
+		"prettier": "^3.5.3",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.54.2",
-		"react-use-measure": "^2.1.7",
 		"sanitize.css": "^13.0.0",
-		"uuid": "^11.0.5",
+		"three": "^0.174.0",
+		"uuid": "^11.1.0",
 		"yup": "^1.6.1",
 		"zustand": "^5.0.3"
 	},
 	"devDependencies": {
-		"@types/node": "^20.17.19",
-		"@types/react": "^18.3.18",
-		"@types/react-dom": "^18.3.5",
-		"eslint": "^8.57.1",
-		"eslint-config-next": "15.1.0",
-		"postcss": "^8.5.2",
-		"prettier": "^3.5.1",
-		"tailwindcss": "^3.4.17",
-		"typescript": "^5.7.3"
+		"@eslint/css": "^0.5.0",
+		"@eslint/eslintrc": "^3",
+		"@next/eslint-plugin-next": "^15.2.3",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-next": "15.2.3",
+		"eslint-plugin-react-hooks": "^5.2.0",
+		"tailwindcss": "^4",
+		"typescript": "^5"
 	},
-	"packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af"
+	"packageManager": "pnpm@10.6.4+sha512.da3d715bfd22a9a105e6e8088cfc7826699332ded60c423b14ec613a185f1602206702ff0fe4c438cb15c979081ce4cb02568e364b15174503a63c7a8e2a5f6c"
 }

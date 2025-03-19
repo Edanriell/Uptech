@@ -1,9 +1,9 @@
 import { type FC, isValidElement, type ReactElement } from "react";
 
 import { FooterNavigationRoot } from "./footer-navigation-root";
-import { NavigationLinksGroup } from "./navigation-links-group";
-import { NavigationLinksList } from "./navigation-links-list";
-import { NavigationLink } from "./navigation-link";
+import { FooterNavigationLinksGroup } from "./footer-navigation-links-group";
+import { FooterNavigationLinksList } from "./footer-navigation-links-list";
+import { FooterNavigationLink } from "./footer-navigation-link";
 
 export type FooterNavigationLink = {
 	name: string;
@@ -11,39 +11,47 @@ export type FooterNavigationLink = {
 };
 
 type FooterNavigationComponents = {
-	NavigationLinksGroup: typeof NavigationLinksGroup;
-	NavigationLinksList: typeof NavigationLinksList;
-	NavigationLink: typeof NavigationLink;
+	NavigationLinksGroup: typeof FooterNavigationLinksGroup;
+	NavigationLinksList: typeof FooterNavigationLinksList;
+	NavigationLink: typeof FooterNavigationLink;
 };
 
 type FooterNavigationProps = {
 	children:
-		| ReactElement<typeof NavigationLinksGroup>
-		| ReactElement<typeof NavigationLinksGroup>[];
+		| ReactElement<typeof FooterNavigationLinksGroup>
+		| ReactElement<typeof FooterNavigationLinksGroup>[];
 };
 
 type FooterNavigation = FC<FooterNavigationProps> & FooterNavigationComponents;
 
-export const FooterNavigation: FooterNavigation = ({ children }) => {
+const validateFooterNavigationChildren = <T,>(
+	children: ReactElement<T> | ReactElement<T>[],
+	expectedType: T,
+	componentName: string
+): void => {
 	if (
 		!(
-			(isValidElement(children) && children.type === NavigationLinksGroup) || // Single child case
-			(Array.isArray(children) && // Multiple children case
-				children.every(
-					(child) => isValidElement(child) && child.type === NavigationLinksGroup
-				))
+			(
+				(isValidElement(children) && children.type === expectedType) || // Single child case
+				(Array.isArray(children) &&
+					children.every((child) => isValidElement(child) && child.type === expectedType))
+			) // Multiple children case
 		)
 	) {
 		throw new Error(
-			`<FooterNavigation> expects one or more children of type <NavigationLinksGroup>. ` +
+			`<${componentName}> expects one or more children of type <${expectedType}>. ` +
 				`You might have passed an invalid child or no children at all. ` +
-				`Make sure to use <NavigationLinksGroup> components as direct children.`
+				`Make sure to use <${expectedType}> components as direct children.`
 		);
 	}
+};
+
+export const FooterNavigation: FooterNavigation = ({ children }) => {
+	validateFooterNavigationChildren(children, FooterNavigationLinksGroup, "FooterNavigation");
 
 	return <FooterNavigationRoot>{children}</FooterNavigationRoot>;
 };
 
-FooterNavigation.NavigationLinksGroup = NavigationLinksGroup;
-FooterNavigation.NavigationLinksList = NavigationLinksList;
-FooterNavigation.NavigationLink = NavigationLink;
+FooterNavigation.NavigationLinksGroup = FooterNavigationLinksGroup;
+FooterNavigation.NavigationLinksList = FooterNavigationLinksList;
+FooterNavigation.NavigationLink = FooterNavigationLink;
