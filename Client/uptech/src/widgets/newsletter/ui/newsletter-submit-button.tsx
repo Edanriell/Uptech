@@ -11,9 +11,6 @@ type NewsletterSubmitButtonProps = {
 	windowWidth: number;
 };
 
-// TODO
-// Fix animations
-
 export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 	formState,
 	windowWidth
@@ -102,7 +99,7 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 		<Button.Provider>
 			<Button
 				className="tablet:w-[149rem] shrink-0 grow-0"
-				transitionOptions={{ type: "spring", duration: 0.65, bounce: 0.35 }}
+				transitionOptions={{ type: "spring", duration: 0.5, bounce: 0 }}
 				type="submit"
 				variants={submitButtonAnimationVariants}
 				animate={formState}
@@ -113,12 +110,12 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 						<motion.span
 							transition={{
 								type: "spring",
-								duration: 1.35,
-								bounce: 0.25
+								duration: 1,
+								bounce: 0
 							}}
-							initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
+							initial={{ opacity: 0, y: -50, filter: "blur(3.8rem)" }}
 							animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
-							exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
+							exit={{ opacity: 0, y: 50, filter: "blur(3.8rem)" }}
 							key={formState}
 						>
 							{renderButtonStaticLayerContent(formState)}
@@ -130,12 +127,12 @@ export const NewsletterSubmitButton: FC<NewsletterSubmitButtonProps> = ({
 						<motion.span
 							transition={{
 								type: "spring",
-								duration: 1.35,
-								bounce: 0.25
+								duration: 1,
+								bounce: 0
 							}}
-							initial={{ opacity: 0, y: -50, filter: "blur(4rem)" }}
+							initial={{ opacity: 0, y: -50, filter: "blur(3.8rem)" }}
 							animate={{ opacity: 1, y: 0, filter: "blur(0rem)" }}
-							exit={{ opacity: 0, y: 50, filter: "blur(4rem)" }}
+							exit={{ opacity: 0, y: 50, filter: "blur(3.8rem)" }}
 							key={formState}
 						>
 							{renderButtonDynamicLayerContent(formState)}

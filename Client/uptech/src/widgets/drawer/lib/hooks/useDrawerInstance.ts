@@ -33,10 +33,10 @@ export const useDrawerInstance = (id: string, reversedIndex: number) => {
 	});
 
 	const initialAnimationVariants: Variants = {
-		right: createAnimationVariants(drawerWidth, 0, 0, "5rem"),
-		left: createAnimationVariants(-drawerWidth, 0, 0, "5rem"),
-		bottom: createAnimationVariants(0, Number(drawerHeight), 0, "5rem"),
-		top: createAnimationVariants(0, -Number(drawerHeight), 0, "5rem")
+		right: createAnimationVariants(drawerWidth, 0, 0, "4.8rem"),
+		left: createAnimationVariants(-drawerWidth, 0, 0, "4.8rem"),
+		bottom: createAnimationVariants(0, Number(drawerHeight), 0, "4.8rem"),
+		top: createAnimationVariants(0, -Number(drawerHeight), 0, "4.8rem")
 	};
 
 	const defaultAnimationVariants: Variants = {
@@ -47,17 +47,17 @@ export const useDrawerInstance = (id: string, reversedIndex: number) => {
 	};
 
 	const lastAnimationVariants: Variants = {
-		right: createAnimationVariants(-70 * maxDrawers, 30 * maxDrawers, 0, "5rem"),
-		left: createAnimationVariants(70 * maxDrawers, 30 * maxDrawers, 0, "5rem"),
-		bottom: createAnimationVariants(0, -70 * maxDrawers, 0, "5rem"),
-		top: createAnimationVariants(0, 70 * maxDrawers, 0, "5rem")
+		right: createAnimationVariants(-70 * maxDrawers, 30 * maxDrawers, 0, "4.8rem"),
+		left: createAnimationVariants(70 * maxDrawers, 30 * maxDrawers, 0, "4.8rem"),
+		bottom: createAnimationVariants(0, -70 * maxDrawers, 0, "4.8rem"),
+		top: createAnimationVariants(0, 70 * maxDrawers, 0, "4.8rem")
 	};
 
 	const exitAnimationVariants: Variants = {
-		right: createAnimationVariants(380, 30 * reversedIndex, 0, "5rem"),
-		left: createAnimationVariants(-380, 30 * reversedIndex, 0, "5rem"),
-		bottom: createAnimationVariants(0, Number(drawerHeight), 0, "5rem"),
-		top: createAnimationVariants(0, -Number(drawerHeight), 0, "5rem")
+		right: createAnimationVariants(380, 30 * reversedIndex, 0, "4.8rem"),
+		left: createAnimationVariants(-380, 30 * reversedIndex, 0, "4.8rem"),
+		bottom: createAnimationVariants(0, Number(drawerHeight), 0, "4.8rem"),
+		top: createAnimationVariants(0, -Number(drawerHeight), 0, "4.8rem")
 	};
 
 	const hoverAnimationVariants: Variants = {
