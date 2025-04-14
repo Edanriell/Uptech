@@ -9,7 +9,6 @@ import { useGesture } from "@use-gesture/react";
 // TODO
 // Refactor whole component
 
-// Create a custom shader material with swapped condition.
 const SliderMaterial = shaderMaterial(
 	{
 		effectFactor: 0.8,

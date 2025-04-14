@@ -13,9 +13,9 @@ export const FooterNavigationLink: FC<NavigationLinkProps> = ({ href, children }
 	return (
 		<MotionConfig transition={{ duration: 0.25, type: "spring", bounce: 0 }}>
 			<motion.li
-				whileHover={{ color: "#ef233c", opacity: 1 }}
-				whileFocus={{ color: "#ef233c", opacity: 1 }}
-				whileTap={{ scale: 0.9 }}
+				whileHover={{ color: "hsl(353,86%,54%)", opacity: 1 }}
+				whileFocus={{ color: "hsl(353,86%,54%)", opacity: 1 }}
+				whileTap={{ scale: 0.95 }}
 				className={"text-white-50 relative opacity-[0.6]"}
 				tabIndex={0}
 			>

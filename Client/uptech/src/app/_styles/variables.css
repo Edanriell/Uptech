@@ -1,9 +1,9 @@
 :root {
 	--font-family: "General Sans";
 
-	--neutral-100: hsl(0, 0%, 100%);
-	--neutral-200: hsl(197, 24%, 94%);
 	--primary: hsl(353, 86%, 54%);
+	--neutral-100: hsl(0, 0%, 100%);
+	--neutral-200: hsl(197, 23%, 94%);
 	--neutral-300: hsl(213, 18%, 78%);
 	--neutral-400: hsl(0, 0%, 24%);
 	--neutral-600: hsl(0, 0%, 16%);

@@ -24,12 +24,14 @@ export const NavigationLink: FC<NavigationLinkProps> = ({ name, Icon, ...rest })
 
 	const linkColors = {
 		navigationLink: {
-			active: "oklch(0.612 0.231 22.608)",
-			inactive: "oklch(0.239 0 89.876)"
+			active: "hsl(353,86%,54%)",
+			inactive: "hsl(0,0%,12%)"
 		}
 	};
 
-	const isNavigationLinkActive = drawers.some((drawer) => drawer.id === name.toLowerCase());
+	const isNavigationLinkActive = drawers.some(
+		(drawer) => drawer.id.toLowerCase() === name.toLowerCase()
+	);
 
 	return (
 		<li className="flex items-center">
@@ -44,7 +46,7 @@ export const NavigationLink: FC<NavigationLinkProps> = ({ name, Icon, ...rest })
 				whileHover={"hover"}
 				whileTap={"tap"}
 				type={"button"}
-				style={{ cursor: "pointer", color: "oklch(0.239 0 89.876)" }}
+				style={{ cursor: "pointer", color: "hsl(0,0%,12%)" }}
 				{...rest}
 			>
 				<span className="sr-only">{name}</span>
