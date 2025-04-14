@@ -55,5 +55,4 @@ export const Newsletter: FC = () => {
 // Decompose input if it is not unique across website
 
 // TODO
-// Buttons of drawer must highlight when drawer opened, we can use red color crimson 600
 // Also drawer exit animation must use radix
