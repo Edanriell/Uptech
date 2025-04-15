@@ -1,7 +1,7 @@
 @import "./base.css";
 
 body {
-	background-color: slategray;
+	background-color: var(--neutral-100);
 	height: 200vh;
 	position: relative;
 	font-size: 16em;
