@@ -8,27 +8,27 @@ import TechImage from "@public/images/raster/pages/home/sections/hero/tech.jpg";
 
 export const HeroSection = () => {
 	return (
-		<section className="w-full h-[760rem] relative pl-[16rem] pr-[16rem] pb-[100rem] flex flex-col items-center justify-end">
+		<section className="w-full h-[760rem] relative pl-[16rem] pr-[16rem] pb-[100rem] flex flex-col items-center justify-end mb-[80rem] tablet:ml-[32rem] tablet:mr-[32rem] tablet:rounded-[24rem] tablet:overflow-hidden tablet:h-[829rem] tablet:pl-[64rem] tablet:pr-[64rem] tablet:grow-0 tablet:shrink-0 tablet:flex-row tablet:items-end tablet:mb-[160rem] tablet:w-[unset]! tablet:gap-x-[55rem]">
 			<Image
 				src={TechImage}
 				alt="Redefining Your Tech Experience"
 				priority={true}
 				placeholder="blur"
-				className="w-full h-full object-cover absolute top-[0] left-[0] z-[10]"
+				className="w-full h-full object-cover absolute top-[0] left-[0] z-[10] tablet:w-[unset]! tablet:max-w-[unset]!"
 				loading="eager"
 			/>
-			<h2 className="min-w-[358rem] font-medium text-[46rem] leading-[100%] capitalize text-center text-(--neutral-100) relative z-[20] mb-[16rem] text-balance">
+			<h2 className="min-w-[358rem] font-medium text-[46rem] leading-[100%] capitalize text-center text-(--neutral-100) relative z-[20] mb-[16rem] text-balance tablet:mb-[unset] tablet:text-left tablet:text-[54rem]">
 				Redefining Your Tech Experience
 			</h2>
-			<div className="relative z-[20]">
-				<p className="min-w-[358rem] font-light text-[16rem] leading-[160%] text-center text-(--neutral-100) mb-[32rem] text-balance">
+			<div className="relative z-[20] tablet:flex tablet:flex-col tablet:items-center tablet:basis-[620rem] tablet:items-start">
+				<p className="min-w-[358rem] font-light text-[16rem] leading-[160%] text-center text-(--neutral-100) mb-[32rem] text-balance tablet:min-w-[unset] tablet:text-left tablet:min-w-[unset] tablet:text-pretty">
 					At UpTech, we&#39;re redefining your tech experience by offering the latest &
 					most innovative products.
 				</p>
-				<div className="flex flex-col gap-y-[8rem]">
+				<div className="flex flex-col gap-y-[8rem] tablet:flex-row tablet:gap-x-[16rem] tablet:flex-wrap">
 					<Button.Provider>
 						<Button
-							className="max-h-[48rem]! h-[48rem]!"
+							className="max-h-[48rem]! h-[48rem]! tablet:max-h-[54rem]! tablet:h-[54rem]! tablet:w-[215rem]!"
 							transitionOptions={{ type: "spring", duration: 0.5, bounce: 0 }}
 							type="button"
 							initial={false}
@@ -54,7 +54,7 @@ export const HeroSection = () => {
 					</Button.Provider>
 					<Button.Provider>
 						<Button
-							className="border-[1rem] border-solid border-(--neutral-100) max-h-[48rem]! h-[48rem]!"
+							className="border-[1rem] border-solid border-(--neutral-100) max-h-[48rem]! h-[48rem]! tablet:max-h-[54rem]! tablet:h-[54rem]! tablet:w-[150rem]"
 							transitionOptions={{ type: "spring", duration: 0.5, bounce: 0 }}
 							type="button"
 							initial={false}
