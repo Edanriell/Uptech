@@ -14,18 +14,18 @@ export const HeroSection = () => {
 				alt="Redefining Your Tech Experience"
 				priority={true}
 				placeholder="blur"
-				className="w-full h-full object-cover absolute top-[0] left-[0] z-[10] tablet:w-[unset]! tablet:max-w-[unset]!"
+				className="w-full h-full object-cover absolute top-[0] left-[0] z-[10] tablet:w-[100%]! tablet:max-w-[unset]!"
 				loading="eager"
 			/>
-			<h2 className="min-w-[358rem] font-medium text-[46rem] leading-[100%] capitalize text-center text-(--neutral-100) relative z-[20] mb-[16rem] text-balance tablet:mb-[unset] tablet:text-left tablet:text-[54rem]">
+			<h2 className="min-w-[358rem] font-medium text-[46rem] leading-[100%] capitalize text-center text-(--neutral-100) relative z-[20] mb-[16rem] text-balance tablet:mb-[unset] tablet:text-left tablet:text-[54rem] desktop:text-[100rem] desktop:min-w-[763rem]">
 				Redefining Your Tech Experience
 			</h2>
-			<div className="relative z-[20] tablet:flex tablet:flex-col tablet:items-center tablet:basis-[620rem] tablet:items-start">
-				<p className="min-w-[358rem] font-light text-[16rem] leading-[160%] text-center text-(--neutral-100) mb-[32rem] text-balance tablet:min-w-[unset] tablet:text-left tablet:min-w-[unset] tablet:text-pretty">
+			<div className="relative z-[20] tablet:flex tablet:flex-col tablet:items-center tablet:basis-[620rem] tablet:items-start desktop:basis-[427rem]">
+				<p className="min-w-[358rem] font-light text-[16rem] leading-[160%] text-center text-(--neutral-100) mb-[32rem] text-balance tablet:min-w-[unset] tablet:text-left tablet:min-w-[unset] tablet:text-pretty desktop:text-[18rem] desktop:text-wrap desktop:min-w-[427rem]">
 					At UpTech, we&#39;re redefining your tech experience by offering the latest &
 					most innovative products.
 				</p>
-				<div className="flex flex-col gap-y-[8rem] tablet:flex-row tablet:gap-x-[16rem] tablet:flex-wrap">
+				<div className="flex flex-col gap-y-[8rem] tablet:flex-row tablet:gap-x-[16rem] tablet:flex-wrap desktop:flex-nowrap">
 					<Button.Provider>
 						<Button
 							className="max-h-[48rem]! h-[48rem]! tablet:max-h-[54rem]! tablet:h-[54rem]! tablet:w-[215rem]!"
