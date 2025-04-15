@@ -2,6 +2,8 @@
 
 import { FC } from "react";
 
+import { HeroSection } from "./sections";
+
 // import { Loader } from "@shared/ui/loader/ui";
 // import { with3D, withCursorFollow } from "@shared/lib/hocs";
 // const ThreeDLoaderWithCursorFollow = with3D(withCursorFollow(Loader));
@@ -12,15 +14,14 @@ import { FC } from "react";
 export const HomePage: FC = () => {
 	return (
 		<main className="relative z-20">
-			<h1>Home Page</h1>
-			{/*<ImageSlider />*/}
-			{/*<ThreeDLoaderWithCursorFollow*/}
-			{/*	width="353rem"*/}
-			{/*	height="312rem"*/}
-			{/*	glowSize={200}*/}
-			{/*	clipPath={loaderClipPath}*/}
-			{/*	alwaysHover={false}*/}
-			{/*/>*/}
+			<HeroSection />
 		</main>
 	);
 };
+
+// TODO
+// DyamicHeader must be optimized !
+// Also when we scroll down dynamic header goes down a bit it moves up if up down.
+// Fix Drawer, implement mobile version
+// Fix animations on hide also add effect movement
+// Also must be fixed width and height use percentage
