@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 
-import { HeroSection } from "./sections";
+import { FeaturedProductsSection, HeroSection } from "./sections";
 
 // import { Loader } from "@shared/ui/loader/ui";
 // import { with3D, withCursorFollow } from "@shared/lib/hocs";
@@ -15,6 +15,7 @@ export const HomePage: FC = () => {
 	return (
 		<main className="relative z-20">
 			<HeroSection />
+			<FeaturedProductsSection />
 		</main>
 	);
 };
