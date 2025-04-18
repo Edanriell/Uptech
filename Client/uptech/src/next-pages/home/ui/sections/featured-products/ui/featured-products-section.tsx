@@ -10,7 +10,7 @@ export const FeaturedProductsSection = () => {
 			<h2 className="font-medium text-[40rem] leading-[100%] capitalize text-center text-(--color-shark-950) tablet:text-left tablet:text-[60rem] desktop:text-[80rem]">
 				Featured products
 			</h2>
-			<ul className="mt-[40rem] flex flex-col gap-y-[32rem] tablet:mt-[60rem] desktop:mt-[80rem] tablet:flex-row tablet:gap-x-[21rem]">
+			<ul className="mt-[40rem] flex flex-col gap-y-[32rem] tablet:mt-[60rem] tablet:flex-row tablet:gap-x-[21rem] desktop:mt-[80rem]">
 				<li className="relative">
 					<article className="relative">
 						<Image
