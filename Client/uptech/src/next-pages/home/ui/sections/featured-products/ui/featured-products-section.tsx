@@ -4,13 +4,18 @@ import WirelessHeadphone from "@public/images/raster/products/wireless-headphone
 import WirelessKeyboard from "@public/images/raster/products/wireless-keyboard.jpg";
 import WirelessMouse from "@public/images/raster/products/wireless-mouse.jpg";
 
+// TODO
+// Featured products must be fetched in server component
+// Also we need to implement swiper slider here !
+// Make interesting hover effect see RDVeikals
+
 export const FeaturedProductsSection = () => {
 	return (
 		<section className="relative ml-[16rem] mr-[16rem] mb-[80rem] tablet:ml-[96rem] tablet:mr-[96rem] tablet:mb-[160rem]">
 			<h2 className="font-medium text-[40rem] leading-[100%] capitalize text-center text-(--color-shark-950) tablet:text-left tablet:text-[60rem] desktop:text-[80rem]">
 				Featured products
 			</h2>
-			<ul className="mt-[40rem] flex flex-col gap-y-[32rem] tablet:mt-[60rem] tablet:flex-row tablet:gap-x-[21rem] desktop:mt-[80rem]">
+			<ul className="mt-[40rem] flex flex-col tablet:items-start tablet:justify-center gap-y-[32rem] tablet:mt-[60rem] tablet:flex-row tablet:gap-x-[21rem] desktop:mt-[80rem]">
 				<li className="relative">
 					<article className="relative">
 						<Image
